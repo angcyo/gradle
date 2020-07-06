@@ -162,3 +162,4 @@ apkPath=xxx
 
 在`工程->Tasks->other`中找到`_pgyerUpload`, 双击运行, 即可执行上传.
 
+默认安装密码:`0000`, 暂不支持修改.
