@@ -1,3 +1,11 @@
-apply from: 'UICore/_gradle/findAllModule.gradle'
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/findAllModule.gradle'
 
+//配置基本库 强制版本信息
 apply from: allGradle.versionConfigLib
+
+//添加七牛文件上传任务
+apply from: allGradle.qiniu
+
+//添加蒲公英文件上传任务
+apply from: allGradle.pgyer
+
