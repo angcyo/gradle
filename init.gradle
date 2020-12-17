@@ -1,10 +1,10 @@
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/findAllModule.gradle'
 
 //配置基本库 强制版本信息
-apply from: allGradle.versionConfigLib
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionConfigLib.gradle'
 
 //添加七牛文件上传任务
-apply from: allGradle.qiniu
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/qiniu.gradle'
 
 //添加蒲公英文件上传任务
-apply from: allGradle.pgyer
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/pgyer.gradle'

@@ -1,3 +1,17 @@
+# 2020-12-17
+
+## 1. setting.gradle
+
+```
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
+```
+
+## 2. build.gradle (根目录下)
+
+```
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
+```
+
 # 2020-7-2
 
 阿里镜像推荐:
