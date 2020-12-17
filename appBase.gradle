@@ -1,0 +1,110 @@
+static def getBuildTime() {
+    return new Date().format("yyyy-MM-dd HH:mm:ss.sss")
+}
+
+static def osName() {
+    return System.getProperty("os.name") + "@" + System.getProperty("os.version")
+}
+
+static def userName() {
+    return System.getProperty("user.name")
+}
+
+static def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+static def apkTime() {
+    return new Date().format("yyyy-MM-dd_HH-mm", TimeZone.getTimeZone("UTC"))
+}
+
+def apk_time = apkTime()
+
+def build_time = getBuildTime()
+def release_time = releaseTime()
+
+def schema = project.hasProperty("schema") ? project.ext.schema : 'default'
+
+println "appBase.gradle↓\n开始编译:schema:" + schema + " time->" + build_time
+
+android {
+
+    defaultConfig {
+        resValue "string", "build_time", build_time
+        resValue "string", "os_name", osName()
+        resValue "string", "user_name", userName()
+        resValue "string", "schema", schema
+        //resValue "bool", "SHOW_DEBUG", "true"
+
+        buildConfigField "String", "USER_NAME", '"' + userName() + '"'
+        buildConfigField "String", "BUILD_TIME", '"' + build_time + '"'
+        buildConfigField "String", "SCHEMA", '"' + schema + '"'
+    }
+
+    //https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.PackagingOptions.html
+    //[merge] [exclude] [pickFirst] [doNotStrip]
+    packagingOptions {
+        merge 'META-INF/DEPENDENCIES'
+        merge 'META-INF/NOTICE'
+        merge 'META-INF/LICENSE'
+        merge 'META-INF/LICENSE.txt'
+        merge 'META-INF/NOTICE.txt'
+        merge 'META-INF/uiview_release.kotlin_module'
+        merge 'META-INF/kotlin_release.kotlin_module'
+        merge 'META-INF/proguard/androidx-annotations.pro'
+        merge 'META-INF/LGPL2.1'
+
+        doNotStrip '*/mips/*.so'
+        doNotStrip '*/mips64/*.so'
+
+        //exclude 'META-INF/uiview_release.kotlin_module'
+
+        //renderscript
+        //pickFirst 'lib/armeabi-v7a/libRSSupport.so'
+        //pickFirst 'lib/arm64-v8a/libRSSupport.so'
+        //pickFirst 'lib/arm64-v8a/librsjni.so'
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    dexOptions {
+        //使用增量模式构建 is obsolete and will be removed soon.
+        //incremental true
+
+        //预编译
+        preDexLibraries true
+
+        //是否支持大工程模式
+        jumboMode true
+
+        //dex进程内存
+        javaMaxHeapSize "2g"
+
+        maxProcessCount 8
+
+        //线程数
+        threadCount 8
+    }
+
+//    aaptOptions {
+//        cruncherEnabled false
+//    }
+
+    //useLibrary 'org.apache.http.legacy'
+    //https://jcenter.bintray.com/org/apache/httpcomponents/httpclient/
+    //implementation 'org.apache.httpcomponents:httpclient:4.5.11'
+
+    /*在manifest文件中加入(推荐):
+    <application>
+    <!-- Apache HTTP client 的相关类打包进 APK 中  -->
+    <uses-library
+        android:name="org.apache.http.legacy"
+        android:required="false" />
+    </application>
+    * */
+}
+
+apply from: allGradle.adb
