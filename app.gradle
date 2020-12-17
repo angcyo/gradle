@@ -12,9 +12,13 @@ apply plugin: 'kotlin-android'
 //apply plugin: 'com.getkeepsafe.dexcount'
 //apply from: 'build_time.gradle'
 
-apply from: allGradle.appBase
-apply from: allGradle.aar
-apply from: allGradle.key
+//apply from: allGradle.appBase
+//apply from: allGradle.aar
+//apply from: allGradle.key
+
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/appBase.gradle'
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/aar.gradle'
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/key.gradle'
 
 static def apkTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("Asia/Shanghai"))
@@ -288,5 +292,8 @@ dependencies {
     debugImplementation 'com.github.DonaldDu:FixUnhandledEvent:1.0'
 }
 
-apply from: allGradle.version
-apply from: allGradle.collectMR
+//apply from: allGradle.version
+//apply from: allGradle.collectMR
+
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/version.gradle'
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/collectMR.gradle'

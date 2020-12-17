@@ -128,4 +128,7 @@ dependencies {
 }
 
 //apply from: allGradle.version
-apply from: allGradle.versionForce
+//apply from: allGradle.versionForce
+
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionForce.gradle'
+

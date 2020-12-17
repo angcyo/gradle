@@ -107,4 +107,6 @@ android {
     * */
 }
 
-apply from: allGradle.adb
+//apply from: allGradle.adb
+
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/adb.gradle'
