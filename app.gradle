@@ -237,10 +237,10 @@ android {
         /*Gradle3.3 以上的方法*/
         applicationVariants.all { variant ->
             if (variant.buildType.name != "debug") {
-                variant.packageApplicationProvider.get()?.outputDirectory = apkFolder
+                variant.packageApplication.outputDirectory = apkFolder
             }
 
-            variant.packageApplicationProvider.get()?.outputScope?.apkDatas?.forEach { apkData ->
+            variant.packageApplication.outputScope?.apkDatas?.forEach { apkData ->
                 apkData.outputFileName = formatApkName(apkFormatName,
                         _app_name,
                         variant.versionName,
