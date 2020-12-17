@@ -92,7 +92,7 @@ android {
     /*aar路径修改, 文件名修改*/
     libraryVariants.all { variant ->
         if (variant.buildType.name != "debug") {
-            variant.getPackageLibraryProvider().get().destinationDir = new File(project.rootDir.absolutePath + "/apk")
+            variant.getPackageLibraryProvider().get().destinationDir = new File(project.rootDir.absolutePath + "/.aar")
         }
 
         variant.outputs.all { output ->
