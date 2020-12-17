@@ -12,6 +12,18 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
 ```
 
+## 3. build.gradle (app工程)
+
+```
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/app.gradle'
+```
+
+## 4. build.gradle (lib工程)
+
+```
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/libBase.gradle'
+```
+
 # 2020-7-2
 
 阿里镜像推荐:

@@ -173,10 +173,12 @@ android {
         jvmTarget = "1.8"
     }
 
-    //android.packageBuildConfig = false
-    //https://stackoverflow.com/questions/63072764/android-packagebuildconfig-false-is-deprecated
-    buildFeatures {
-        buildConfig = true
+    if (gradle.gradleVersion.startsWith("6")) {
+        //android.packageBuildConfig = false
+        //https://stackoverflow.com/questions/63072764/android-packagebuildconfig-false-is-deprecated
+        buildFeatures {
+            buildConfig = true
+        }
     }
 
     /*Gradle3.0 以下的方法*/
