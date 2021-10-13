@@ -1,13 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
 
-def C_SDK = 28
+def C_SDK = 29
 def M_SDK = 21
-def T_SDK = 28
+def T_SDK = 29
 def V_CODE = 1
 def V_NAME = "1.0"
 
-def _kotlin_version = project.hasProperty("kotlin_version") ? project.ext.kotlin_version : '1.3.61'
+def _kotlin_version = project.hasProperty("kotlin_version") ? project.ext.kotlin_version : '1.5.20'
 
 def _minify_enabled_debug = project.hasProperty("minify_enabled_debug") ? (project.ext.minify_enabled_debug == "true") : false
 def _use_proguard_debug = project.hasProperty("use_proguard_debug") ? (project.ext.use_proguard_debug == "true") : false
@@ -105,7 +106,9 @@ android {
         }
 
         variant.outputs.all { output ->
-            if (gradle.gradleVersion.startsWith("6.5")) {
+            if (gradle.gradleVersion.startsWith("6.5") ||
+                    gradle.gradleVersion.startsWith("6.7") ||
+                    gradle.gradleVersion.startsWith("7")) {
                 output.outputFileName = ((project.name != "app") ? project.name : rootProject.name) + "-" +
                         defaultConfig.versionName + "_" +
                         variant.buildType.name +
@@ -132,3 +135,88 @@ dependencies {
 
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionForce.gradle'
 
+
+/// 构建源码jar包
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+}
+task javadoc(type: Javadoc) {
+    //增加编码，这行很重要，如果是windows系统，同时如果在代码中有中文的话，不加这行，上传会报错
+    options.encoding = "utf-8"
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    archiveClassifier.set('javadoc')
+}
+
+def libGroupId = project.hasProperty('libGroupId') ? project.property('libGroupId') : 'com.angcyo'
+def versionName = project.hasProperty('libVersionName') ? project.property('libVersionName') : '0.0.1'
+def winRepo = project.hasProperty('libWinRepo') ? project.property('libWinRepo') : 'E:/AndroidProjects/maven'
+def macRepo = project.hasProperty('libMacRepo') ? project.property('libMacRepo') : '/Users/angcyo/Project/Android/GithubDemo/maven'
+
+//Executing task 'publish'...
+
+afterEvaluate {
+    publishing {
+
+        //产物收集配置
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = libGroupId
+                artifactId = project.name
+                version = versionName
+
+                //artifact javadocJar
+                artifact sourcesJar
+            }
+        }
+
+        //目标仓库配置
+        repositories {
+            maven {
+                // change to point to your repo, e.g. http://my.org/repo
+                //url = 'E:/AndroidProjects/maven'//"$buildDir/repo"
+
+                def os = System.getProperty("os.name").toLowerCase()
+                def path = os.contains("mac") ? macRepo : winRepo
+                url = path
+
+                System.err.println(project.name + "->本地Maven路径:${path}")
+            }
+        }
+    }
+}
+
+//bintray {
+//    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+//    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+//
+//    publications = ['release']
+//    configurations = ['archives']
+//
+//    //https://github.com/bintray/gradle-bintray-plugin#buildgradle
+//    pkg {
+//        repo = "maven"
+//        name = "library"   //发布到JCenter上的项目名字
+//        desc = 'create by angcyo.'
+//        //userOrg = "angcyo"
+//        websiteUrl = 'https://github.com/angcyo'
+//        vcsUrl = 'https://github.com/angcyo'
+//        licenses = ["MIT"]
+//        publicDownloadNumbers = true
+//        publish = true
+//
+//        /*version {
+//            name = versionName
+//            desc = 'library ' + versionName
+//        }*/
+//    }
+//}
