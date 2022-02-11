@@ -20,16 +20,16 @@ import java.util.regex.Pattern
  * Copyright (c) 2019 ShenZhen O&M Cloud Co., Ltd. All rights reserved.
  */
 
-/**
- * 文件输出的文件夹(基于项目根目录的相对路径)
- * */
-ext.output = ".apk"
+///**
+// * 文件输出的文件夹(基于项目根目录的相对路径)
+// * */
+//ext.apk_output = ".apk"
 
 afterEvaluate {
 
     def targets = []
 
-    def output = ext.output
+    def output = project.hasProperty("apk_path") ? project.ext.apk_path : ".apk"
 
     project.tasks.each {
         if (it.name.startsWith("assemble")) {
@@ -80,6 +80,9 @@ afterEvaluate {
             //def rFile = new File(rPath)
 
             def outputPath = "${project.rootDir.absolutePath}/${output}/"
+
+            //output
+            println outputPath
 
             file(outputPath).mkdirs()
             //不同的风味, 收集到不同的文件夹
@@ -150,6 +153,7 @@ def copyFile(String from, String toPath) {
         while ((bytesRead = input.read(buf)) != -1) {
             output.write(buf, 0, bytesRead)
         }
+        dest.setLastModified(source.lastModified())
     } finally {
         if (input != null) {
             input.close()

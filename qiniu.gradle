@@ -3,7 +3,7 @@
  * 请无视IDEA的爆红, 并不影响运行.
  * 请不要随意导入其他包.
  *
- * 脚本`apply`之后, 会在gradle窗口中的: 工程->Tasks->other 中出现 `_qiniuUpload` 任务. 双击即可运行.
+ * 脚本`apply`之后, 会在gradle窗口中的: 工程->Tasks->angcyo 中出现 `_qiniuUpload` 任务. 双击即可运行.
  *
  * https://github.com/angcyo/gradle
  *
@@ -29,8 +29,9 @@
 /**
  * 为了保证`Key`的安全:
  * 可以在
- * win: 'C:\Users\用户名\.gradle\gradle.properties"'
- * mac: '/Users/用户名/.gradle/gradle.properties"'
+ * win: 'C:\Users\用户名\.gradle\gradle.properties'
+ * mac: '/Users/用户名/.gradle/gradle.properties'
+ * linux: '/root/.gradle/gradle.properties'
  * 文件中加入配置:
  * ```
  * qiniu_ak=xxx
@@ -55,8 +56,8 @@ ext.qiniuConfig = [
 
         //如果需要将url转成二维码, 参考以下链接, 注册app_id和app_secret
         //https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F
-        "app_id"           : "rhqkxdsnjnrpp3xr",
-        "app_secret"       : "Rlh4c1duMDZ4YnZrRks4dU55c1NEQT09",
+        "qr_api_app_id"    : "",
+        "qr_api_app_secret": "",
 
         //用来保存上传成功后, APK的下载地址
         "downloadUrl"      : "",
@@ -75,7 +76,7 @@ buildscript {
         classpath 'com.qiniu:qiniu-java-sdk:7.8.0'
         classpath 'com.squareup.okhttp3:okhttp:3.14.4'
         //https://jcenter.bintray.com/com/google/code/gson/gson/
-        classpath "com.google.code.gson:gson:2.8.6"
+        classpath "com.google.code.gson:gson:2.8.8"
     }
 }
 
@@ -84,7 +85,7 @@ buildscript {
  * 拿到下载url->生成url二维码地址
  * */
 
-task _qiniuUpload() {
+task _qiniuUpload(group: 'angcyo', description: '上传文件到七牛云') {
     doFirst {
         def ak = project.hasProperty("qiniu_ak") ? project.ext.qiniu_ak : qiniuConfig.qiniu_ak
         def sk = project.hasProperty("qiniu_sk") ? project.ext.qiniu_sk : qiniuConfig.qiniu_sk
@@ -94,11 +95,16 @@ task _qiniuUpload() {
         def qiniuDeleteBefore = project.hasProperty("qiniuDeleteBefore") ? project.ext.qiniuDeleteBefore : aliyunOssConfig.qiniuDeleteBefore
         def deleteBefore = qiniuDeleteBefore == "true"
 
-        def app_id = project.hasProperty("app_id") ? project.ext.app_id : qiniuConfig.app_id
-        def app_secret = project.hasProperty("app_id") ? project.ext.app_secret : qiniuConfig.app_secret
+        def app_id = project.hasProperty("qr_api_app_id") ? project.ext.qr_api_app_id : qiniuConfig.qr_api_app_id
+        def app_secret = project.hasProperty("qr_api_app_secret") ? project.ext.qr_api_app_secret : qiniuConfig.qr_api_app_secret
         def codeLogo = project.hasProperty("codeLogo") ? project.ext.codeLogo : null
 
-        def apkPath = project.hasProperty("qiniuApkPath") ? project.ext.qiniuApkPath : qiniuConfig.qiniuApkPath
+        def apkPath = null
+        if (project.hasProperty("qiniuApkPath")) {
+            apkPath = project.ext.qiniuApkPath
+        } else {
+            apkPath = findApkFile()
+        }
         if (apkPath == null || apkPath.isEmpty()) {
             throw new IllegalStateException("请在[gradle.properties]文件中指定需要上传的文件路径[qiniuApkPath=xxx]")
         }
@@ -107,6 +113,8 @@ task _qiniuUpload() {
 
         //创建上传凭证, 这是必须的.
         def auth = com.qiniu.util.Auth.create(ak, sk)
+
+        def client = new okhttp3.OkHttpClient()
 
         allPath.each { path ->
             def apkFile = file(path)
@@ -118,7 +126,7 @@ task _qiniuUpload() {
                     throw new IllegalStateException("需要上传的文件不存在:" + apkFile.getAbsolutePath())
                 }
             } else {
-                def key = apkFile.name
+                def key = apkFile.name /*+ new Date().format("_yyyy-MM-dd_HH-mm-ss")*/
 
                 def putPolicy = new com.qiniu.util.StringMap()
                 putPolicy.put("returnBody", "{\"key\":\"" + key + "\", \"hash\":\"" + System.currentTimeMillis() + "\"}")
@@ -164,53 +172,173 @@ task _qiniuUpload() {
                 qiniuConfig.downloadUrl = downloadUrl
                 System.err.println "七牛云上传成功->" + qiniuConfig.downloadUrl
 
+                if (codeLogo == null || codeLogo.isEmpty()) {
+                    codeLogo = getLogoPath(key)
+                }
+
                 if (!app_id.isEmpty() && !app_secret.isEmpty()) {
+                    def qrCodeUrl = requestQrCodeUrl(app_id, app_secret, downloadUrl, codeLogo)
 
-                    def url = ""
-                    def request = null
+                    System.err.println ''
+                    System.err.println "二维码地址->$qrCodeUrl"
+
+                    //下载网站地址
+                    def downloadTitle = project.hasProperty("downloadTitle") ? project.ext.downloadTitle : key
+                    def downloadDes = project.hasProperty("downloadDes") ? project.ext.downloadDes : ""
+                    //"1.修复已知问题<br>2.优化交互体验"
+                    def t = URLEncoder.encode(downloadTitle, "UTF-8")
+                    def d = URLEncoder.encode(downloadDes, "UTF-8")
+
+                    def webUrl = "https://angcyo.gitee.io/download?r=${downloadUrl}&q=${qrCodeUrl}&t=${t}&d=${d}"
+                    System.err.println ''
+                    System.err.println "下载web地址->${webUrl}"
+                    def webQrUrl = requestQrCodeUrl(app_id, app_secret, webUrl, codeLogo)
+                    System.err.println "下载web地址[二维码]->${webQrUrl}"
+                    System.err.println ''
+                    def webQrCodeFile = file(".apk/二维码网站_${getBuildTime()}.png")
+                    saveUrlToFile(client, webQrUrl, webQrCodeFile)
+
+                    def qrCodeUrlBack
                     if (codeLogo == null || codeLogo.isEmpty()) {
-                        //无logo
-                        url = "http://www.mxnzp.com/api/qrcode/create/single?content=${downloadUrl}&size=400&type=0"
-
-                        request = new okhttp3.Request.Builder()
-                                .header("app_id", app_id)
-                                .header("app_secret", app_secret)
-                                .url(url)
-                                .build()
+                        qrCodeUrlBack = "http://qr.topscan.com/api.php?text=${downloadUrl}"
                     } else {
-                        //有logo
-                        url = "https://www.mxnzp.com/api/qrcode/create/logo?content=${downloadUrl}&size=400&type=0"
-
-                        okhttp3.RequestBody requestBody = new okhttp3.MultipartBody.Builder()
-                                .setType(okhttp3.MultipartBody.FORM)
-                                .addFormDataPart("logo_img",
-                                        "codeLogo",
-                                        okhttp3.RequestBody.create(okhttp3.MediaType.parse("multipart/form-data"), new File(codeLogo)))
-                                .build()
-
-                        request = new okhttp3.Request.Builder()
-                                .post(requestBody)
-                                .header("app_id", app_id)
-                                .header("app_secret", app_secret)
-                                .url(url)
-                                .build()
+                        qrCodeUrlBack = "http://qr.topscan.com/api.php?text=${downloadUrl}&logo=${codeLogo}"
                     }
+                    System.err.println "备用二维码地址->$qrCodeUrlBack"
 
-                    //生成url对应的二维码
-                    //https://github.com/MZCretin/RollToolsApi#%E5%85%AB%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81
-                    def client = new okhttp3.OkHttpClient()
-                    def json = client.newCall(request).execute().body().string()
-                    def map = new com.google.gson.Gson().fromJson(json, Map.class)
-                    println "创建二维码:${json}"
-                    System.err.println "二维码地址->" + map["data"]["qrCodeUrl"]
+                    //保存二维码图片到文件
+                    def qrCodeFile = file(".apk/二维码_${getBuildTime()}.png")
+                    saveUrlToFile(client, qrCodeUrl, qrCodeFile)
 
-                    if (codeLogo == null || codeLogo.isEmpty()) {
-                        System.err.println "备用二维码地址->http://qr.topscan.com/api.php?text=${downloadUrl}"
-                    } else {
-                        System.err.println "备用二维码地址->http://qr.topscan.com/api.php?text=${downloadUrl}&logo=${codeLogo}"
-                    }
+                    //保存备用二维码图片到文件
+                    def qrCodeFileBack = file(".apk/二维码备用_${getBuildTime()}.png")
+                    saveUrlToFile(client, qrCodeUrlBack, qrCodeFileBack)
+
+                    //将二维码url存入文件, 方便在Jenkins中使用
+                    def codeTextFile = file(".apk/二维码地址_${getBuildTime()}.txt")
+                    codeTextFile.createNewFile()
+                    codeTextFile.append("二维码地址↓\n")
+                    codeTextFile.append(qrCodeUrl)
+                    codeTextFile.append("\n网站二维码地址↓\n")
+                    codeTextFile.append(webQrUrl)
+                    codeTextFile.append("\n备用二维码地址↓\n")
+                    codeTextFile.append(qrCodeUrlBack)
                 }
             }
         }
     }
+}
+
+/**查找apk文件路径*/
+def findApkFile() {
+    def path = project.hasProperty("apk_path") ? project.ext.apk_path : ".apk"
+
+    def folder = file(path)
+    def result = null
+
+    def files = folder.listFiles()
+    files?.each {
+        if (it.isFile()) {
+            if (it.getName().endsWith(".apk")) {
+                if (result == null) {
+                    result = it.absolutePath
+                } else {
+                    result = result + ";" + it.absolutePath
+                }
+            }
+        }
+    }
+
+    return result
+}
+
+/**根据文件名, 获取png目录的logo图片
+ * [png/logo.png] 正式包logo
+ * [png/logo_test.png] 测试式包logo
+ * */
+def getLogoPath(apkFileName) {
+    def path
+    if (apkFileName.contains("apk_release")) {
+        path = "png/logo.png"
+    } else {
+        path = "png/logo_test.png"
+    }
+    if (file(path).exists()) {
+        return path
+    }
+    return null
+}
+
+/**创建一个生成二维码的请求*/
+def qrcodeRequest(content, logoPath, app_id, app_secret) {
+    def s = URLEncoder.encode(content, "UTF-8")
+
+    def url = ""
+    def request = null
+
+    if (logoPath == null || logoPath.isEmpty()) {
+        //无logo
+        url = "http://www.mxnzp.com/api/qrcode/create/single?content=${s}&size=400&type=0"
+
+        request = new okhttp3.Request.Builder()
+                .header("app_id", app_id)
+                .header("app_secret", app_secret)
+                .url(url)
+                .build()
+    } else {
+        //有logo
+        url = "https://www.mxnzp.com/api/qrcode/create/logo?content=${s}&size=400&type=0"
+
+        def logoBody = okhttp3.RequestBody.create(okhttp3.MediaType.parse("multipart/form-data"), file(logoPath))
+
+        okhttp3.RequestBody requestBody = new okhttp3.MultipartBody.Builder()
+                .setType(okhttp3.MultipartBody.FORM)
+                .addFormDataPart("logo_img", "codeLogo", logoBody)
+                .build()
+
+        request = new okhttp3.Request.Builder()
+                .post(requestBody)
+                .header("app_id", app_id)
+                .header("app_secret", app_secret)
+                .url(url)
+                .build()
+    }
+
+    return request
+}
+
+static def saveUrlToFile(client, url, file) {
+    def request = new okhttp3.Request.Builder()
+            .url(url)
+            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.64")
+            .get()
+            .build()
+    def rep = client.newCall(request).execute()
+    saveStream(rep.body().byteStream(), file)
+}
+
+static def saveStream(inputStream, file) {
+    def out = new FileOutputStream(file, false)
+    out.leftShift(inputStream)
+    out.flush()
+    out.close()
+}
+
+static def getBuildTime() {
+    return new Date().format("yyyy-MM-dd_HH-mm-ss")
+}
+
+/**将内容打成二维码图片地址*/
+def requestQrCodeUrl(app_id, app_secret, content, logoPath) {
+    def request = qrcodeRequest(content, logoPath, app_id, app_secret)
+
+    //生成url对应的二维码
+    //https://github.com/MZCretin/RollToolsApi#%E5%85%AB%E7%94%9F%E6%88%90%E4%BA%8C%E7%BB%B4%E7%A0%81
+    def client = new okhttp3.OkHttpClient()
+    def json = client.newCall(request).execute().body().string()
+    def map = new com.google.gson.Gson().fromJson(json, Map.class)
+    println "接口返回:${json}"
+
+    def qrCodeUrl = map["data"]["qrCodeUrl"]
+    return qrCodeUrl
 }

@@ -8,3 +8,6 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/qiniu.gradle'
 
 //添加蒲公英文件上传任务
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/pgyer.gradle'
+
+//添加阿里云Oss文件上传任务
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/aliyunOss.gradle'

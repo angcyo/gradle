@@ -67,28 +67,27 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled _minify_enabled
+            //minifyEnabled _minify_enabled
 //            useProguard _use_proguard
+            //matchingFallbacks = ['release']
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         pretest {
-            minifyEnabled _minify_enabled
+            //minifyEnabled _minify_enabled
 //            useProguard _use_proguard
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
-            minifyEnabled _minify_enabled_debug
+            //minifyEnabled _minify_enabled_debug
 //            useProguard _use_proguard_debug
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    kotlinOptions { jvmTarget = JavaVersion.VERSION_1_8 }
 
     def aarFolder = new File(project.rootDir.absolutePath + "/.aar")
     aarFolder.mkdirs()
@@ -132,9 +131,10 @@ dependencies {
 
 //apply from: allGradle.version
 //apply from: allGradle.versionForce
+//apply from: allGradle.base
 
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionForce.gradle'
-
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/base.gradle'
 
 /// 构建源码jar包
 task sourcesJar(type: Jar) {
@@ -186,7 +186,7 @@ afterEvaluate {
                 //url = 'E:/AndroidProjects/maven'//"$buildDir/repo"
 
                 def os = System.getProperty("os.name").toLowerCase()
-                def path = os.contains("mac") ? macRepo : winRepo
+                def path = os.contains("window") ? winRepo : macRepo
                 url = path
 
                 System.err.println(project.name + "->本地Maven路径:${path}")

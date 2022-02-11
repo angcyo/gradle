@@ -1,5 +1,5 @@
 static def getBuildTime() {
-    return new Date().format("yyyy-MM-dd HH:mm:ss.sss")
+    return new Date().format("yyyy-MM-dd HH:mm:ss.sss", TimeZone.getTimeZone("UTC"))
 }
 
 static def osName() {
@@ -25,7 +25,7 @@ def release_time = releaseTime()
 
 def schema = project.hasProperty("schema") ? project.ext.schema : 'default'
 
-println "appBase.gradle↓\n开始编译:schema:" + schema + " time->" + build_time
+println "appBase.gradle↓\n开始编译:schema:" + schema + " time->" + build_time + "\n" + osName() + "/" + userName()
 
 android {
 
@@ -65,30 +65,6 @@ android {
         //pickFirst 'lib/arm64-v8a/librsjni.so'
     }
 
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
-
-    dexOptions {
-        //使用增量模式构建 is obsolete and will be removed soon.
-        //incremental true
-
-        //预编译
-        preDexLibraries true
-
-        //是否支持大工程模式
-        jumboMode true
-
-        //dex进程内存
-        javaMaxHeapSize "2g"
-
-        maxProcessCount 8
-
-        //线程数
-        threadCount 8
-    }
-
 //    aaptOptions {
 //        cruncherEnabled false
 //    }
@@ -108,5 +84,7 @@ android {
 }
 
 //apply from: allGradle.adb
+//apply from: allGradle.base
 
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/adb.gradle'
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/base.gradle'
