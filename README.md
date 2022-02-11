@@ -48,7 +48,6 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
 
 可以通过在同级文件夹中新建`ignore`文件, 加入需要忽略`include`的`module名`, 进行忽略操作.
 
-
 # findAllModule.gradle
 
 枚举所有`module`工程, 放在全局变量`allModule`中;
@@ -57,7 +56,7 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
 
 在需要使用`module`的地方, 可以使用 `allModule.xxx`的方式获取:
 
->`xxx`表示包含`build.gradle`文件的`module`文件夹的名字
+> `xxx`表示包含`build.gradle`文件的`module`文件夹的名字
 
 **比如:**
 
@@ -74,7 +73,7 @@ dependencies {
 
 在需要使用`gralde`文件的地方, 可以使用`allGradle.xxx`的方式获取:
 
->`xxx`表示包含`gradle`文件的文件名
+> `xxx`表示包含`gradle`文件的文件名
 
 **比如:**
 
@@ -108,19 +107,27 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
 
 # qiniu.gradle
 
-2020-7-6 七牛云对象存储文件上传脚本.
+## 脚本说明
+
+七牛云对象存储文件上传脚本.
 
 ## 使用方法
 
 如果使用了之前的`init.gradle`脚本, 则此脚本自动依赖.
-手动依赖, 请在`root`工程下的`build.gradle`文件中使用`apply`
+
+手动依赖, 请在`root`工程下的`build.gradle`文件中使用
+
+```groovy
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/qiniu.gradle'
+//or
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/qiniu.gradle'
+```
 
 ## 配置项
 
 请在`gradle.properties`文件中配置:
 
 `gradle.properties`文件有2个地方可以配置:
-
 
 **1:**
 win用户: 'C:\Users\用户名\.gradle\gradle.properties"'
@@ -135,57 +142,135 @@ mac用户: '/Users/用户名/.gradle/gradle.properties"'
 
 这2个地方的`gradle.properties`文件作用一致.
 
-
 ```gradle
 # 必填配置项
 
 # 下载域名前缀, 需要'/'结尾(在七牛云上配置的外链域名)
-baseUrl=xxx
+qiniuBaseUrl=xxx
 
 # 七牛ak
-AccessKey=xxx
+qiniu_ak=xxx
 
 # 七牛sk
-SecretKey=xxx
+qiniu_sk=xxx
 
 # 七牛文件存储Bucket名
-Bucket=xxx
+qiniu_bucket=xxx
 ```
 
-如果需要将下载地址转成二维码, 还需要配置:
-
-参考:https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F
+如果需要将下载地址转成二维码, 还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
 
 ```gradle
-app_id=xxx
-app_secret=xxx
+qr_api_app_id=xxx
+qr_api_app_secret=xxx
 ```
 
-以上是固定配置, 当需要上传文件时, 还需要指定文件路径:
+## 配置上传的文件
+
+可以通过`qiniuApkPath`指定需要上传的文件,多个文件用`;`分割.
+
+如果未指定`qiniuApkPath`, 则会上传项目`工程根目录/.apk`文件夹下面所有的`apk`文件.
 
 ```gradle
-apkPath=xxx
+qiniuApkPath=xxx
 ```
 
-配置完成之后, 在`工程->Tasks->other`中找到`_qiniuUpload`, 双击运行, 即可执行上传.
+配置完成之后, 点击`Sync Now`, 之后在`工程Gradle窗口->Tasks->angcyo`中找到`_qiniuUpload`, 双击运行, 即可执行上传任务.
 
 # pgyer.gradle
 
-2020-7-6 蒲公英文件上传脚本.
+## 脚本说明
+
+蒲公英文件上传脚本.
+
+## 使用方法
+
+如果使用了之前的`init.gradle`脚本, 则此脚本自动依赖.
+
+手动依赖, 请在`root`工程下的`build.gradle`文件中使用
+
+```groovy
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/pgyer.gradle'
+//or
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/pgyer.gradle'
+```
+
+## 配置项
 
 请在`gradle.properties`文件中配置:
 
 ```gradle
-api_key=xxx
-user_key=xxx
+pgyer_api_key=xxx
+pgyer_user_key=xxx
 ```
 
-指定文件:
+如果需要将下载地址转成二维码, 还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
 
 ```gradle
-apkPath=xxx
+qr_api_app_id=xxx
+qr_api_app_secret=xxx
 ```
 
-在`工程->Tasks->other`中找到`_pgyerUpload`, 双击运行, 即可执行上传.
+## 配置上传的文件
 
-默认安装密码:`0000`, 暂不支持修改.
+可以通过`pgyerApkPath`指定需要上传的文件,多个文件用`;`分割.
+
+如果未指定`pgyerApkPath`, 则会上传项目`工程根目录/.apk`文件夹下面所有的`apk`文件.
+
+```gradle
+pgyerApkPath=xxx
+```
+
+配置完成之后, 点击`Sync Now`, 之后在`工程Gradle窗口->Tasks->angcyo`中找到`_pgyerUpload`, 双击运行, 即可执行上传任务.
+
+# aliyunOss.gradle
+
+## 脚本说明
+
+阿里云文件上传脚本.
+
+## 使用方法
+
+如果使用了之前的`init.gradle`脚本, 则此脚本自动依赖.
+
+手动依赖, 请在`root`工程下的`build.gradle`文件中使用
+
+```groovy
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/aliyunOss.gradle'
+//or
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/aliyunOss.gradle'
+```
+
+## 配置项
+
+请在`gradle.properties`文件中配置:
+
+```gradle
+aliyunOssAccessKeyId=xxx
+aliyunOssAccessKeySecret=xxx
+aliyunOssBucketName=xxx
+
+aliyunOssBaseUrl=xxx
+aliyunOssEndpoint=xxx
+
+```
+
+如果需要将下载地址转成二维码, 还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
+
+```gradle
+qr_api_app_id=xxx
+qr_api_app_secret=xxx
+```
+
+## 配置上传的文件
+
+可以通过`aliyunOssFilePath`指定需要上传的文件,多个文件用`;`分割.
+
+如果未指定`aliyunOssFilePath`, 则会上传项目`工程根目录/.apk`文件夹下面所有的`apk`文件.
+
+```gradle
+aliyunOssFilePath=xxx
+```
+
+配置完成之后, 点击`Sync Now`, 之后在`工程Gradle窗口->Tasks->angcyo`中找到`_aliyunOssUpload`, 双击运行, 即可执行上传任务.
+
