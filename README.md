@@ -3,24 +3,32 @@
 ## 1. setting.gradle
 
 ```
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/includeAllModule.gradle'
+//or
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
 ```
 
 ## 2. build.gradle (根目录下)
 
 ```
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/init.gradle'
+//or
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
 ```
 
 ## 3. build.gradle (app工程)
 
 ```
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/app.gradle'
+//or
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/app.gradle'
 ```
 
 ## 4. build.gradle (lib工程)
 
 ```
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/libBase.gradle'
+//or
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/libBase.gradle'
 ```
 
@@ -158,7 +166,8 @@ qiniu_sk=xxx
 qiniu_bucket=xxx
 ```
 
-如果需要将下载地址转成二维码, 还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
+如果需要将下载地址转成二维码,
+还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
 
 ```gradle
 qr_api_app_id=xxx
@@ -204,7 +213,8 @@ pgyer_api_key=xxx
 pgyer_user_key=xxx
 ```
 
-如果需要将下载地址转成二维码, 还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
+如果需要将下载地址转成二维码,
+还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
 
 ```gradle
 qr_api_app_id=xxx
@@ -255,7 +265,8 @@ aliyunOssEndpoint=xxx
 
 ```
 
-如果需要将下载地址转成二维码, 还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
+如果需要将下载地址转成二维码,
+还需要申请: [点击申请APP_ID](https://github.com/MZCretin/RollToolsApi#%E8%A7%A3%E9%94%81%E6%96%B0%E6%96%B9%E5%BC%8F)
 
 ```gradle
 qr_api_app_id=xxx
@@ -273,4 +284,14 @@ aliyunOssFilePath=xxx
 ```
 
 配置完成之后, 点击`Sync Now`, 之后在`工程Gradle窗口->Tasks->angcyo`中找到`_aliyunOssUpload`, 双击运行, 即可执行上传任务.
+
+# local.gradle
+
+读取本地`local.properties`文件, 并将配置信息写入`rootProject.ext`
+
+```gradle
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/local.gradle'
+//or
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
+```
 
