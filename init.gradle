@@ -1,5 +1,8 @@
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/findAllModule.gradle'
 
+//读取local.properties
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
+
 //配置基本库 强制版本信息
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionConfigLib.gradle'
 
@@ -11,3 +14,6 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/pgyer.gradle'
 
 //添加阿里云Oss文件上传任务
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/aliyunOss.gradle'
+
+//抖音无水印视频下载
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/dyVideo.gradle'
