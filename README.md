@@ -287,7 +287,11 @@ aliyunOssFilePath=xxx
 
 # local.gradle
 
+## 脚本说明
+
 读取本地`local.properties`文件, 并将配置信息写入`rootProject.ext`
+
+## 脚本使用
 
 ```gradle
 apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/local.gradle'
