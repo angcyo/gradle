@@ -44,6 +44,9 @@ android {
             gradle.gradleVersion.charAt(0) >= '7') {
         /*Gradle4.1 以上的方法*/
         applicationVariants.all { variant ->
+            def defPath = variant.packageApplicationProvider.get().outputDirectory.getAsFile().get().absolutePath
+            println "\napk.gradle ${gradle.gradleVersion}→APK默认输出目录:${defPath}"
+
             if (variant.buildType.name != "debug") {
                 variant.packageApplicationProvider.get().outputDirectory = new File(apkFolder, variant.name)
             }
@@ -62,6 +65,9 @@ android {
     } else if (gradle.gradleVersion.startsWith("6")) {
         /*Gradle4.0 以上的方法*/
         applicationVariants.all { variant ->
+            def defPath = variant.packageApplicationProvider.get().outputDirectory.getAsFile().get().absolutePath
+            println "\napk.gradle ${gradle.gradleVersion}→APK默认输出目录:${defPath}"
+
             if (variant.buildType.name != "debug") {
                 variant.packageApplicationProvider.get().outputDirectory = new File(apkFolder, variant.name)
             }
@@ -80,6 +86,9 @@ android {
     } else if (gradle.gradleVersion.startsWith("5")) {
         /*Gradle3.3 以上的方法*/
         applicationVariants.all { variant ->
+            def defPath = variant.packageApplication.outputDirectory.getAsFile().get().absolutePath
+            println "\napk.gradle ${gradle.gradleVersion}→APK默认输出目录:${defPath}"
+
             if (variant.buildType.name != "debug") {
                 variant.packageApplication.outputDirectory = new File(apkFolder, variant.name)
             }
@@ -99,6 +108,9 @@ android {
     } else {
         /*Gradle3.0 以上的方法*/
         applicationVariants.all { variant ->
+            def defPath = variant.getPackageApplication().outputDirectory.getAsFile().get().absolutePath
+            println "\napk.gradle ${gradle.gradleVersion}→APK默认输出目录:${defPath}"
+
             if (variant.buildType.name != "debug") {
                 //new File(project.rootDir.absolutePath + "/apk")
                 variant.getPackageApplication().outputDirectory = new File(apkFolder, variant.name)
