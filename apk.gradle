@@ -54,7 +54,7 @@ android {
                         apk_time,
                         variant.flavorName,
                         variant.buildType.name,
-                        variant.signingConfig.name,
+                        variant.signingConfig?.name,
                         keyAlias
                 )
             }
@@ -72,7 +72,7 @@ android {
                         apk_time,
                         variant.flavorName,
                         variant.buildType.name,
-                        variant.signingConfig.name,
+                        variant.signingConfig?.name,
                         keyAlias
                 )
             }
@@ -91,7 +91,7 @@ android {
                         apk_time,
                         variant.flavorName,
                         variant.buildType.name,
-                        variant.signingConfig.name,
+                        variant.signingConfig?.name,
                         keyAlias
                 )
             }
@@ -111,7 +111,7 @@ android {
                         apk_time,
                         variant.flavorName,
                         variant.buildType.name,
-                        variant.signingConfig.name,
+                        variant.signingConfig?.name,
                         keyAlias
                 )
             }
