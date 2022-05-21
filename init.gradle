@@ -1,4 +1,9 @@
+//https://plugins.gradle.org/ 插件市场
+
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/findAllModule.gradle'
+
+//公共方法
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/common.gradle'
 
 //读取local.properties
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
