@@ -22,4 +22,4 @@ if (gradle.gradleVersion.charAt(0) >= '7') {
     }
 }
 
-apply from: 'includeAllModule.gradle'
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
