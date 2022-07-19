@@ -1,0 +1,15 @@
+android {
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libobjectbox-jni.so'
+        pickFirst 'lib/arm64-v8a/libobjectbox-jni.so'
+        pickFirst 'lib/x86/libobjectbox-jni.so'
+        pickFirst 'lib/x86_64/libobjectbox-jni.so'
+    }
+}
+
+dependencies {
+    implementation "io.objectbox:objectbox-android:$objectboxVersion"
+}
+
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.objectbox' // Apply last.
