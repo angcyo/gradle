@@ -17,7 +17,7 @@ apply plugin: 'kotlin-android'
 //apply from: allGradle.key
 
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/appBase.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/aar.gradle'
+//apply from: 'https://gitee.com/angcyo/gradle/raw/master/aar.gradle'
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/key.gradle'
 
 static def apkTime() {
