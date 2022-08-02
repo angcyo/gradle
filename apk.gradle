@@ -52,11 +52,6 @@ android {
             def defPath = defFolder.absolutePath
             println "\napk.gradle ${gradleVersion}→默认输出目录↓\n${variant.name}-> ${defPath}"
 
-            defFolder.mkdirs()
-            def metadataFile = new File(defFolder, "output-metadata.json")
-            println metadataFile.absolutePath
-            metadataFile.createNewFile()
-
             if (variant.buildType.name != "debug") {
                 variant.packageApplicationProvider.get().outputDirectory = new File(apkFolder, variant.name)
             }
