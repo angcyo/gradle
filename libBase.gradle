@@ -105,5 +105,5 @@ dependencies {
 
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionForce.gradle'
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/base.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/jar.gradle'
+//apply from: 'https://gitee.com/angcyo/gradle/raw/master/jar.gradle'
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/publish.gradle'
