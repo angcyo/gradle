@@ -145,6 +145,9 @@ android {
             minifyEnabled _minify_enabled
 
             resValue "bool", "show_debug", "true"
+
+            //匹配回退
+            matchingFallbacks = ['debug']
         }
         release {
             //applicationIdSuffix ".release"
