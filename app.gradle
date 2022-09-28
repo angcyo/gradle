@@ -178,7 +178,7 @@ dependencies {
 
     //https://stackoverflow.com/questions/51957944/android-view-viewonunhandledkeyeventlistener
     //https://github.com/DonaldDu/FixUnhandledEvent/
-    debugImplementation 'com.github.DonaldDu:FixUnhandledEvent:1.0.1'
+    //debugImplementation 'com.github.DonaldDu:FixUnhandledEvent:1.0.1'
 }
 
 //apply from: allGradle.version
