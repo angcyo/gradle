@@ -40,6 +40,22 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/libBase.gradle'
 maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 ```
 
+# common.gradle
+
+## 脚本说明
+
+提供了一些`公共的方法`.
+
+```gradle
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/common.gradle'
+//or
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/common.gradle'
+```
+
+## 脚本使用
+
+在更目录下的`build.gradle`文件用引用, 即可在全部的`build.gradle`中使用公共方法.
+
 # includeAllModule.gradle
 
 自动包含当前文件夹中的所有的`module`, 通过是否存在`build.gradle`文件, 识别当前文件夹是否是`module`.
