@@ -68,19 +68,19 @@ android {
         debug {
             debuggable true
             minifyEnabled lib_minify_enabled_debug
-            useProguard lib_use_proguard_debug
+            //useProguard lib_use_proguard_debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         pretest {
             initWith debug
             minifyEnabled lib_minify_enabled_debug
-            useProguard lib_minify_enabled_debug
+            //useProguard lib_minify_enabled_debug
             matchingFallbacks = ['debug']
         }
         release {
             initWith debug
             minifyEnabled lib_minify_enabled
-            useProguard lib_use_proguard
+            //useProguard lib_use_proguard
             debuggable false
         }
     }
