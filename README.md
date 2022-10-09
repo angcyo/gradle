@@ -299,3 +299,36 @@ apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/local.gradle
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
 ```
 
+# publish.gradle
+
+## 脚本说明
+
+用于生成`pom`文件,和对应的`aar`文件
+
+## 脚本使用
+
+```gradle
+apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/publish.gradle'
+//or
+apply from: 'https://gitee.com/angcyo/gradle/raw/master/publish.gradle'
+```
+
+同步之后, 会在对应模块的`Tasks`列表出现`publishing->publish`任务, 双击运行即可构建生成对应文件.
+
+## 脚本配置项
+
+配置项需要放在`gradle.properties`文件中.
+
+```
+#aar的group id
+libGroupId=xxx
+
+#发布的版本名
+libVersionName=master-SNAPSHOT
+
+#win系统aar文件输出路径
+libWinRepo=E:/maven
+
+#mac系统aar文件输出路径
+libMacRepo=/Users/maven
+```
