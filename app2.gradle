@@ -98,8 +98,9 @@ android {
 //        }
 //    }
 
+    /*
     flavorDimensions "flavor"
-    /*productFlavors {
+    productFlavors {
         //develop
         _dev {
             dimension "flavor"
