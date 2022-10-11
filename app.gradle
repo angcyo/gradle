@@ -49,7 +49,7 @@ println "........app.gradle........end"
 //println rootProject
 
 android {
-
+    namespace "$application_id" //gradle7.5+
     compileSdkVersion Integer.parseInt(_C_SDK)
     //buildToolsVersion rootProject.B_TOOLS
     defaultConfig {
