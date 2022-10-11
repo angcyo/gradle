@@ -190,5 +190,5 @@ dependencies {
 
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/version.gradle'
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/collectMR.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/apk.gradle'
+//apply from: 'https://gitee.com/angcyo/gradle/raw/master/apk.gradle'
 apply from: 'https://gitee.com/angcyo/gradle/raw/master/metadata.gradle'
