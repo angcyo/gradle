@@ -141,6 +141,19 @@ android {
             resValue "bool", "show_debug", "true"
             resValue "bool", "is_debug", "true"
         }
+        /*pretest {
+            //https://developer.android.com/studio/build/build-variants
+            //applicationIdSuffix ".pretest"
+            //manifestPlaceholders = [hostName:"internal.example.com"]
+            initWith debug
+            minifyEnabled _minify_enabled
+
+            resValue "bool", "show_debug", "true"
+            resValue "bool", "is_debug", "true"
+
+            //匹配回退
+            matchingFallbacks = ['debug']
+        }*/
         release {
             //applicationIdSuffix ".release"
             initWith debug
