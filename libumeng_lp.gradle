@@ -1,0 +1,23 @@
+//https://stackoverflow.com/questions/23446233/compile-jar-from-url-in-gradle
+def urlFile = { url, name ->
+    def urlName = name
+    if (name == null || name.isEmpty()) {
+        urlName = url.substring(url.lastIndexOf("/") + 1)
+    }
+    def file = new File("$buildDir/download/${urlName}")
+    file.parentFile.mkdirs()
+    if (!file.exists()) {
+        new URL(url).withInputStream { downloadStream ->
+            file.withOutputStream { fileOut ->
+                fileOut << downloadStream
+            }
+        }
+    }
+    files(file.absolutePath)
+}
+
+dependencies {
+    compileOnly urlFile('https://gitcode.net/angcyo/file/-/raw/master/aar/UMeng/umeng-abtest-v1.0.0.aar', 'umeng-abtest-v1.0.0.aar')
+    compileOnly urlFile('https://gitcode.net/angcyo/file/-/raw/master/aar/UMeng/umeng-apm-armeabi-v1.4.2.aar', 'umeng-apm-armeabi-v1.4.2.aar')
+    compileOnly urlFile('https://gitcode.net/angcyo/file/-/raw/master/aar/UMeng/umeng-asms-armeabi-v1.4.1.aar', 'umeng-asms-armeabi-v1.4.1.aar')
+}
