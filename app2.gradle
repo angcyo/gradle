@@ -16,9 +16,9 @@ apply plugin: 'kotlin-android'
 //apply from: allGradle.aar
 //apply from: allGradle.key
 
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/appBase.gradle'
-//apply from: 'https://gitee.com/angcyo/gradle/raw/master/aar.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/key.gradle'
+apply from: "$gradleHost/master/appBase.gradle"
+//apply from: "$gradleHost/master/aar.gradle"
+apply from: "$gradleHost/master/key.gradle"
 
 static def apkTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("Asia/Shanghai"))
@@ -190,7 +190,7 @@ dependencies {
 //apply from: allGradle.collectMR
 //apply from: allGradle.apk
 
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/version.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/collectMR.gradle'
-//apply from: 'https://gitee.com/angcyo/gradle/raw/master/apk.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/metadata.gradle'
+apply from: "$gradleHost/master/version.gradle"
+apply from: "$gradleHost/master/collectMR.gradle"
+//apply from: "$gradleHost/master/apk.gradle"
+apply from: "$gradleHost/master/metadata.gradle"

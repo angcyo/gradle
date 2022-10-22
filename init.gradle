@@ -1,24 +1,24 @@
 //https://plugins.gradle.org/ 插件市场
 
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/findAllModule.gradle'
+apply from: "$gradleHost/master/findAllModule.gradle"
 
 //公共方法
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/common.gradle'
+apply from: "$gradleHost/master/common.gradle"
 
 //读取local.properties
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
+apply from: "$gradleHost/master/local.gradle"
 
 //配置基本库 强制版本信息
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/versionConfigLib.gradle'
+apply from: "$gradleHost/master/versionConfigLib.gradle"
 
 //添加七牛文件上传任务
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/qiniu.gradle'
+apply from: "$gradleHost/master/qiniu.gradle"
 
 //添加蒲公英文件上传任务
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/pgyer.gradle'
+apply from: "$gradleHost/master/pgyer.gradle"
 
 //添加阿里云Oss文件上传任务
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/aliyunOss.gradle'
+apply from: "$gradleHost/master/aliyunOss.gradle"
 
 //抖音无水印视频下载
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/dyVideo.gradle'
+apply from: "$gradleHost/master/dyVideo.gradle"

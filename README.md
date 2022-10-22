@@ -1,35 +1,49 @@
+# 2022-10-22
+
+请在`gradle.properties`文件中配置脚本服务器(请不要以`/`结尾):
+
+## 国内 gitee
+
+```
+gradleHost=https://gitee.com/angcyo/gradle/raw
+```
+
+## 国内 gitcode
+
+```
+gradleHost=https://gitcode.net/angcyo/gradle/-/raw
+```
+
+## 国外 github
+
+```
+gradleHost=https://raw.githubusercontent.com/angcyo/gradle
+```
+
 # 2020-12-17
 
 ## 1. setting.gradle
 
 ```
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/includeAllModule.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
+apply from: "$gradleHost/master/includeAllModule.gradle"
 ```
 
 ## 2. build.gradle (根目录下)
 
 ```
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/init.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
+apply from: "$gradleHost/master/init.gradle"
 ```
 
 ## 3. build.gradle (app工程)
 
 ```
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/app.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/app.gradle'
+apply from: "$gradleHost/master/app.gradle"
 ```
 
 ## 4. build.gradle (lib工程)
 
 ```
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/libBase.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/libBase.gradle'
+apply from: "$gradleHost/master/libBase.gradle"
 ```
 
 # 2020-7-2
@@ -47,9 +61,7 @@ maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 提供了一些`公共的方法`.
 
 ```gradle
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/common.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/common.gradle'
+apply from: "$gradleHost/master/common.gradle"
 ```
 
 ## 脚本使用
@@ -65,9 +77,7 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/common.gradle'
 在`settings.gradle`文件夹中加入:
 
 ```groovy
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/includeAllModule.gradle'
-//备用地址:
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/includeAllModule.gradle'
+apply from: "$gradleHost/master/includeAllModule.gradle"
 ```
 
 可以通过在同级文件夹中新建`ignore`文件, 加入需要忽略`include`的`module名`, 进行忽略操作.
@@ -115,18 +125,13 @@ apply from: allGradle.v7a
 在根目录的`build.gradle`文件夹中加入:
 
 ```groovy
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/findAllModule.gradle'
-//备用地址:
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/findAllModule.gradle'
-
+apply from: "$gradleHost/master/findAllModule.gradle"
 ```
 
 或者 ** (推荐以下使用方式)**
 
 ```groovy
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/init.gradle'
-//备用地址:
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
+apply from: "$gradleHost/master/init.gradle"
 ```
 
 # qiniu.gradle
@@ -142,9 +147,7 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/init.gradle'
 手动依赖, 请在`root`工程下的`build.gradle`文件中使用
 
 ```groovy
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/qiniu.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/qiniu.gradle'
+apply from: "$gradleHost/master/qiniu.gradle"
 ```
 
 ## 配置项
@@ -215,9 +218,7 @@ qiniuApkPath=xxx
 手动依赖, 请在`root`工程下的`build.gradle`文件中使用
 
 ```groovy
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/pgyer.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/pgyer.gradle'
+apply from: "$gradleHost/master/pgyer.gradle"
 ```
 
 ## 配置项
@@ -262,9 +263,7 @@ pgyerApkPath=xxx
 手动依赖, 请在`root`工程下的`build.gradle`文件中使用
 
 ```groovy
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/aliyunOss.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/aliyunOss.gradle'
+apply from: "$gradleHost/master/aliyunOss.gradle"
 ```
 
 ## 配置项
@@ -310,9 +309,7 @@ aliyunOssFilePath=xxx
 ## 脚本使用
 
 ```gradle
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/local.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
+apply from: "$gradleHost/master/local.gradle"
 ```
 
 # publish.gradle
@@ -324,9 +321,7 @@ apply from: 'https://gitee.com/angcyo/gradle/raw/master/local.gradle'
 ## 脚本使用
 
 ```gradle
-apply from: 'https://raw.githubusercontent.com/angcyo/gradle/master/publish.gradle'
-//or
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/publish.gradle'
+apply from: "$gradleHost/master/publish.gradle"
 ```
 
 同步之后, 会在对应模块的`Tasks`列表出现`publishing->publish`任务, 双击运行即可构建生成对应文件.

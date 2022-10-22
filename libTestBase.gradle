@@ -1,4 +1,4 @@
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/libBase.gradle'
+apply from: "$gradleHost/master/libBase.gradle"
 
 android {
     defaultConfig {

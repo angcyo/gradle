@@ -63,5 +63,5 @@ android {
 //apply from: allGradle.adb
 //apply from: allGradle.base
 
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/adb.gradle'
-apply from: 'https://gitee.com/angcyo/gradle/raw/master/base.gradle'
+apply from: "$gradleHost/master/adb.gradle"
+apply from: "$gradleHost/master/base.gradle"
