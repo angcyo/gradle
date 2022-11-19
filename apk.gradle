@@ -54,17 +54,17 @@ android {
 
             if (variant.buildType.name != "debug") {
                 variant.packageApplicationProvider.get().outputDirectory = new File(apkFolder, variant.name)
-            }
-            variant.outputs.forEach {
-                it.outputFileName = formatApkName(apkFormatName,
-                        _app_name,
-                        variant.versionName,
-                        apk_time,
-                        variant.flavorName,
-                        variant.buildType.name,
-                        variant.signingConfig?.name ?: '',
-                        keyAlias
-                )
+                variant.outputs.forEach {
+                    it.outputFileName = formatApkName(apkFormatName,
+                            _app_name,
+                            variant.versionName,
+                            apk_time,
+                            variant.flavorName,
+                            variant.buildType.name,
+                            variant.signingConfig?.name ?: '',
+                            keyAlias
+                    )
+                }
             }
         }
     } else if (gradleVersion.startsWith("6")) {
