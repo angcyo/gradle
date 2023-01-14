@@ -13,18 +13,12 @@ apply plugin: 'kotlin-android'
 //apply from: 'build_time.gradle'
 
 //apply from: allGradle.appBase
-//apply from: allGradle.aar
+//apply from: allGradle.aar //2022-05-08 remove
 //apply from: allGradle.key
 
 apply from: "$gradleHost/master/appBase.gradle"
 //apply from: "$gradleHost/master/aar.gradle"
 apply from: "$gradleHost/master/key.gradle"
-
-static def apkTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("Asia/Shanghai"))
-}
-
-def apk_time = apkTime()
 
 def _C_SDK = project.hasProperty("C_SDK") ? project.ext.C_SDK : '31'
 def _M_SDK = project.hasProperty("M_SDK") ? project.ext.M_SDK : '21'
@@ -62,6 +56,8 @@ android {
         targetSdkVersion Integer.parseInt(_T_SDK)
         versionCode Integer.parseInt(_V_CODE)
         versionName "$_V_NAME"
+
+        //min sdk 21时, 自动开启 https://developer.android.com/studio/build/multidex
         multiDexEnabled true
 
         //https://developer.android.com/studio/build/shrink-code?hl=zh-cn#groovy
@@ -89,6 +85,10 @@ android {
                 arguments = ["objectbox.incremental": "true"]
             }
         }
+
+        //变种降级策略
+        //https://developer.android.com/studio/build/build-variants?hl=zh-cn#resolve_matching_errors
+        //missingDimensionStrategy 'flavor'
     }
 //    sourceSets {
 //        main {
@@ -112,6 +112,8 @@ android {
             //applicationIdSuffix ".pre"
             //versionNameSuffix "-pre"
             //applicationId "com.acc.xxx.pre"
+            //versionCode 100
+            //versionName "1.0.0"
             dimension "flavor"
             minSdkVersion Integer.parseInt(_M_SDK)
             resValue "bool", "is_preview", "true"
@@ -153,6 +155,7 @@ android {
             resValue "bool", "is_debug", "true"
 
             //匹配回退
+            //https://developer.android.com/studio/build/build-variants?hl=zh-cn#resolve_matching_errors
             matchingFallbacks = ['debug']
         }
         release {
@@ -182,14 +185,17 @@ dependencies {
 
     //https://stackoverflow.com/questions/51957944/android-view-viewonunhandledkeyeventlistener
     //https://github.com/DonaldDu/FixUnhandledEvent/
-    //debugImplementation 'com.github.DonaldDu:FixUnhandledEvent:1.0.1'
+    //debugImplementation 'com.github.DonaldDu:FixUnhandledEvent:1.0.1' //2022-9-28
 }
 
 //apply from: allGradle.version
 //apply from: allGradle.collectMR
 //apply from: allGradle.apk
+//apply from: allGradle.metadata
+//apply from: allGradle.copyAab
 
 apply from: "$gradleHost/master/version.gradle"
 apply from: "$gradleHost/master/collectMR.gradle"
 apply from: "$gradleHost/master/apk.gradle"
 apply from: "$gradleHost/master/metadata.gradle"
+apply from: "$gradleHost/master/copyAab.gradle"
