@@ -22,3 +22,6 @@ apply from: "$gradleHost/master/aliyunOss.gradle"
 
 //抖音无水印视频下载
 apply from: "$gradleHost/master/dyVideo.gradle"
+
+//批量任务执行
+apply from: "$gradleHost/master/batchTasks.gradle"
