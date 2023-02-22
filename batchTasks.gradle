@@ -12,13 +12,13 @@
 
 task _batchTasks(group: 'angcyo', description: '批量任务执行') {
     if (project.hasProperty("batchTasks")) {
-        def tasks = getBatchTasks()
-        dependsOn tasks
+        def taskList = getBatchTasks()
+        dependsOn taskList
 
         if (project.ext.batchTasks.endsWith(";")) {
             //最后一个任务, 必须等待其他任务执行完毕后执行
-            tasks.named(tasks.last()) {
-                mustRunAfter tasks.subList(0, tasks.size() - 2)
+            tasks.named(taskList.last()) {
+                mustRunAfter taskList.subList(0, taskList.size() - 2)
             }
         }
     }
