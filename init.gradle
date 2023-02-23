@@ -8,6 +8,9 @@ apply from: "$gradleHost/master/common.gradle"
 //读取local.properties
 apply from: "$gradleHost/master/local.gradle"
 
+//复制apk文件任务
+apply from: "$gradleHost/master/copyApkFile.gradle"
+
 //配置基本库 强制版本信息
 apply from: "$gradleHost/master/versionConfigLib.gradle"
 
