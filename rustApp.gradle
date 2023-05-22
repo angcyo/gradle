@@ -10,7 +10,8 @@
  *
  * */
 
-apply from: allGradle.rustBase
+//apply from: allGradle.rustBase
+apply from: "$gradleHost/master/rustBase.gradle"
 
 afterEvaluate {
     // The `cargoBuild` task isn't available until after evaluation.
