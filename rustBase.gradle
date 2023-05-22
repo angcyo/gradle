@@ -6,7 +6,7 @@ cargo {
     libname = "rust"              // Or whatever matches Cargo.toml's [package] name.
     //["arm", "arm64", "x86", "x86_64"]    // See bellow for a longer list of options
     targets = ["arm", "arm64"]
-    //profile = 'release' //Defaults to "debug"
+    profile = 'release' //Defaults to "debug"
     verbose = true
 
     prebuiltToolchains = true
@@ -22,9 +22,10 @@ cargo {
     //压缩属性
     // https://github.com/RustStudioIst/min-sized-rust
 
-    profile.release.strip = true
-    profile.release.lto = true
-    profile.release.panic = "abort"
-    //profile.release.codegen-units = 1
-    //profile.release.opt-level = "z"
+//    [profile.release]
+//    strip = true  # Automatically strip symbols from the binary.
+//    opt-level = "z"  # Optimize for size.
+//    lto = true  # Perform link-time optimizations.
+//    codegen-units = 1  # Compile the whole crate at once.
+//    panic = "abort"  # Abort on panic.
 }
