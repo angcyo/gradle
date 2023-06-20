@@ -103,7 +103,7 @@ android {
 //        }
 //    }
 
-    flavorDimensions "flavor"
+    flavorDimensions = ['flavor']
     productFlavors {
         //develop
         _dev {

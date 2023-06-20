@@ -43,9 +43,7 @@ android {
 
     def gv = gradleVersion.charAt(0)
 
-    if (gv >= '8') {
-        println "ignore-->" + gradleVersion
-    } else if (gradleVersion.startsWith("6.5") ||
+    if (gradleVersion.startsWith("6.5") ||
             gradleVersion.startsWith("6.7") ||
             gradleVersion.startsWith("7") ||
             gv >= '7') {
