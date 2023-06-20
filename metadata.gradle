@@ -12,7 +12,8 @@
  */
 
 tasks.whenTaskAdded { task ->
-    if (task.name.contains("ListingFileRedirect")) {
+    def taskName = task.name
+    if (taskName.contains("ListingFileRedirect") && !taskName.contains("Debug")) {
         task.enabled = false
     }
 }
