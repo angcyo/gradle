@@ -66,6 +66,7 @@ android {
             )
             setAabPathProperty(variant.flavorName, variant.buildType.name, new File(outputFolder, outputName + ".aab").absolutePath)
 
+            println "buildType-->" + variant.buildType.name + "   " + (variant.buildType.name != "debug")
             if (variant.buildType.name != "debug") {
                 variant.packageApplicationProvider.get().outputDirectory = outputFolder
                 variant.outputs.forEach {
