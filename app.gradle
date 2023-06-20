@@ -213,5 +213,5 @@ dependencies {
 apply from: "$gradleHost/master/version.gradle"
 apply from: "$gradleHost/master/collectMR.gradle"
 apply from: "$gradleHost/master/apk.gradle"
-//apply from: "$gradleHost/master/metadata.gradle"
+apply from: "$gradleHost/master/metadata.gradle"
 apply from: "$gradleHost/master/copyAab.gradle"
