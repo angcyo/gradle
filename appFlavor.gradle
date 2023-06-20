@@ -2,6 +2,7 @@
 
 def _M_SDK = project.hasProperty("M_SDK") ? project.ext.M_SDK : '21'
 def _minify_enabled_debug = project.hasProperty("minify_enabled_debug") ? (project.ext.minify_enabled_debug == "true") : false
+def _minify_enabled = project.hasProperty("minify_enabled") ? (project.ext.minify_enabled == "true") : _minify_enabled_debug
 
 android {
     if (gradle.gradleVersion.charAt(0) >= '8') {
