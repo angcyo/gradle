@@ -67,7 +67,12 @@ android {
             setAabPathProperty(variant.flavorName, variant.buildType.name, new File(outputFolder, outputName + ".aab").absolutePath)
 
             if (variant.buildType.name != "debug") {
-                variant.packageApplicationProvider.get().outputDirectory = outputFolder
+                if (gv >= '8') {
+                    //为了避免不出现[metadata.gradle]中的错误, output-metadata.json, 这里不直接修改输出文件夹
+                    //而是采用编译完成后, 复制文件的方式
+                } else {
+                    variant.packageApplicationProvider.get().outputDirectory = outputFolder
+                }
                 variant.outputs.forEach {
                     it.outputFileName = outputName + ".apk"
                 }
