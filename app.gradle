@@ -110,6 +110,88 @@ android {
             buildConfig = true
         }
     }
+
+    //---
+
+    if (gradle.gradleVersion.charAt(0) >= '8') {
+        flavorDimensions = ['flavor']
+    } else {
+        flavorDimensions 'flavor'
+    }
+    productFlavors {
+        //develop
+        _dev {
+            dimension "flavor"
+            minSdkVersion Math.max(Integer.parseInt(_M_SDK), 21)
+            resValue "bool", "is_preview", "true"
+        }
+        //preview
+        pre {
+            //https://developer.android.com/studio/build/build-variants
+            //applicationIdSuffix ".pre"
+            //versionNameSuffix "-pre"
+            //applicationId "com.acc.xxx.pre"
+            //versionCode 100
+            //versionName "1.0.0"
+            dimension "flavor"
+            minSdkVersion Integer.parseInt(_M_SDK)
+            resValue "bool", "is_preview", "true"
+        }
+        //apk
+        apk {
+            dimension "flavor"
+            minSdkVersion Integer.parseInt(_M_SDK)
+            resValue "bool", "is_preview", "false"
+
+            //applicationId "com.angcyo.xxx.xxx"
+            //versionName project.hasProperty("V_NAME_RELEASE") ? project.ext.V_NAME_RELEASE : project.ext.V_NAME
+        }
+    }
+    buildTypes {
+        debug {
+            //applicationIdSuffix ".debug"
+            zipAlignEnabled true
+            shrinkResources false
+            minifyEnabled _minify_enabled_debug
+            //useProguard _use_proguard_debug //默认会使用R8压缩优化代码
+            signingConfig signingConfigs.angcyo
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+            jniDebuggable = true
+            crunchPngs = false
+
+            ext.enableCrashlytics = false
+            ext.alwaysUpdateBuildId = false
+
+            resValue "bool", "show_debug", "true"
+            resValue "bool", "is_debug", "true"
+        }
+        pretest {
+            //https://developer.android.com/studio/build/build-variants
+            //applicationIdSuffix ".pretest"
+            //manifestPlaceholders = [hostName:"internal.example.com"]
+            initWith debug
+            minifyEnabled _minify_enabled
+
+            resValue "bool", "show_debug", "true"
+            resValue "bool", "is_debug", "true"
+
+            //匹配回退
+            //https://developer.android.com/studio/build/build-variants?hl=zh-cn#resolve_matching_errors
+            matchingFallbacks = ['debug']
+        }
+        release {
+            //applicationIdSuffix ".release"
+            initWith debug
+            minifyEnabled _minify_enabled
+            debuggable false
+            jniDebuggable = false
+            crunchPngs = true
+
+            resValue "bool", "show_debug", "false"
+            resValue "bool", "is_debug", "false"
+        }
+    }
 }
 
 dependencies {
@@ -127,9 +209,9 @@ dependencies {
 //apply from: allGradle.metadata
 //apply from: allGradle.copyAab
 
-apply from: "$gradleHost/master/appFlavor.gradle"
+//apply from: "$gradleHost/master/appFlavor.gradle"
 apply from: "$gradleHost/master/version.gradle"
 apply from: "$gradleHost/master/collectMR.gradle"
 apply from: "$gradleHost/master/apk.gradle"
-apply from: "$gradleHost/master/metadata.gradle"
+//apply from: "$gradleHost/master/metadata.gradle"
 apply from: "$gradleHost/master/copyAab.gradle"
