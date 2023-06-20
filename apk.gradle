@@ -43,7 +43,9 @@ android {
 
     def gv = gradleVersion.charAt(0)
 
-    if (gradleVersion.startsWith("6.5") ||
+    if (gv >= '8') {
+        println "ignore-->" + gradleVersion
+    } else if (gradleVersion.startsWith("6.5") ||
             gradleVersion.startsWith("6.7") ||
             gradleVersion.startsWith("7") ||
             gv >= '7') {
@@ -66,7 +68,6 @@ android {
             )
             setAabPathProperty(variant.flavorName, variant.buildType.name, new File(outputFolder, outputName + ".aab").absolutePath)
 
-            println "buildType-->" + variant.buildType.name + "   " + (variant.buildType.name != "debug")
             if (variant.buildType.name != "debug") {
                 variant.packageApplicationProvider.get().outputDirectory = outputFolder
                 variant.outputs.forEach {
