@@ -14,15 +14,11 @@ apply plugin: 'kotlin-android'
 
 //plugins {
 //  id 'com.android.application'
+//  id 'com.android.library'
 //  id 'org.jetbrains.kotlin.android'
 //}
 
-//apply from: allGradle.appBase
-//apply from: allGradle.aar //2022-05-08 remove
 //apply from: allGradle.key
-
-apply from: "$gradleHost/master/appBase.gradle"
-//apply from: "$gradleHost/master/aar.gradle"
 apply from: "$gradleHost/master/key.gradle"
 
 def _C_SDK = project.hasProperty("C_SDK") ? project.ext.C_SDK : '33'
@@ -103,16 +99,6 @@ android {
 //        }
 //    }
 
-    if (gradle.gradleVersion.charAt(0) >= '6') {
-        //android.packageBuildConfig = false
-        //https://stackoverflow.com/questions/63072764/android-packagebuildconfig-false-is-deprecated
-        buildFeatures {
-            buildConfig = true
-        }
-    }
-
-    //---
-
     if (gradle.gradleVersion.charAt(0) >= '8') {
         flavorDimensions = ['flavor']
     } else {
@@ -192,10 +178,22 @@ android {
             resValue "bool", "is_debug", "false"
         }
     }
+
+    if (gradle.gradleVersion.charAt(0) >= '6') {
+        //android.packageBuildConfig = false
+        //https://stackoverflow.com/questions/63072764/android-packagebuildconfig-false-is-deprecated
+        buildFeatures {
+            buildConfig = true
+        }
+    }
 }
+
+//apply from: allGradle.appBase
+apply from: "$gradleHost/master/appBase.gradle"
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //implementation project(allModule.core)
 
     //https://stackoverflow.com/questions/51957944/android-view-viewonunhandledkeyeventlistener
     //https://github.com/DonaldDu/FixUnhandledEvent/
