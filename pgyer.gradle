@@ -8,6 +8,9 @@
  * https://www.pgyer.com/doc/view/app_upload
  * https://www.pgyer.com/doc/view/api#uploadApp
  *
+ * 2023-9-22
+ * 蒲公英域名更改: https://www.xcxwo.com/
+ *
  * Email:angcyo@126.com
  * @author angcyo* @date 2019/08/09
  * Copyright (c) 2019 ShenZhen O&M Cloud Co., Ltd. All rights reserved.
@@ -32,10 +35,10 @@ ext.pgyerConfig = [
 
         //请求的api地址
         //https://www.pgyer.com/doc/view/api#uploadApp
-        "pgyerUrl"         : "https://www.pgyer.com/apiv2/app/upload",
+        "pgyerUrl"         : "https://www.xcxwo.com/apiv2/app/upload",
 
         //官网, 用于拼接短地址 必须/结尾.
-        "pgyer"            : "https://www.pgyer.com/",
+        "pgyer"            : "https://www.xcxwo.com/",
 
         "pgyer_api_key"    : "",
         "pgyer_user_key"   : "",
@@ -178,10 +181,12 @@ _pgyerUpload.doLast {
                         codeLogo = getLogoPath(fileKey)
                     }
 
-                    def qrCodeUrl = requestQrCodeUrl(app_id, app_secret, url, codeLogo)
+                    if (codeLogo != null) {
+                        def qrCodeUrl = requestQrCodeUrl(app_id, app_secret, url, codeLogo)
 
-                    System.err.println ''
-                    System.err.println "二维码地址->$qrCodeUrl"
+                        System.err.println ''
+                        System.err.println "二维码地址->$qrCodeUrl"
+                    }
                 }
             }
         }
@@ -224,8 +229,13 @@ def requestQrCodeUrl(app_id, app_secret, content, logoPath) {
     def map = new com.google.gson.Gson().fromJson(json, Map.class)
     println "接口返回:${json}"
 
-    def qrCodeUrl = map["data"]["qrCodeUrl"]
-    return qrCodeUrl
+    def data = map["data"]
+    if (data != null) {
+        def qrCodeUrl = data["qrCodeUrl"]
+        return qrCodeUrl
+    } else {
+        return null
+    }
 }
 
 /**创建一个生成二维码的请求*/
