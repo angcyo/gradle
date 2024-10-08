@@ -49,7 +49,7 @@ childProjects.each {
 
         //自动获取 主工程的 sdk配置信息
         def defaultConfig
-        if (gradle.gradleVersion.charAt(0) >= '8') {
+        if (Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
             defaultConfig = projectObj.android.defaultConfig
             C_SDK = projectObj.android.compileSdk
             if (!haveLibMSdk) {
@@ -69,14 +69,14 @@ childProjects.each {
 }
 
 android {
-    if (gradle.gradleVersion.charAt(0) >= '8') {
+    if (Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
         compileSdk C_SDK
     } else {
         compileSdkVersion C_SDK
     }
 
     defaultConfig {
-        if (gradle.gradleVersion.charAt(0) >= '8') {
+        if (Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
             minSdk 21
             targetSdk T_SDK
         } else {
