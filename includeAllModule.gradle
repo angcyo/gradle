@@ -2,7 +2,7 @@ ext.maxDepth = 2
 ext.includeConfig = [:]
 ext.ignoreModule = []
 
-def autoInclude = rootProject.hasProperty('autoInclude') ? rootProject.autoInclude == "true" : true
+ext.autoInclude = rootProject.hasProperty('autoInclude') ? rootProject.autoInclude == "true" : true
 
 def rootDirFile /*File*/ = getRootDir()
 println "includeAllModule.gradle↓\n开始包含项目in->" + rootDirFile.getAbsolutePath()
