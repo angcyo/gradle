@@ -18,7 +18,10 @@ if (rootProject.hasProperty("gradleModuleFolder")) {
     folderList.each {
         def file = new File(it)
         if (file.exists()) {
-            listPath(file)
+            if (file.isDirectory()) {
+                includePath(file, "")
+                listPath(file)
+            }
         }
     }
 }
