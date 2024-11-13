@@ -3,6 +3,11 @@ apply from: "$gradleHost/master/v7v8a.gradle"
 //output
 apply from: "$gradleHost/master/collectProduct.gradle"
 
+/*//在ext中设置的属性一样可以通过`project.getProperty`获取
+ext {
+
+}*/
+
 /*//2024-9-24
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
