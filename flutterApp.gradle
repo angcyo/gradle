@@ -118,13 +118,13 @@ android {
             zipAlignEnabled true
             shrinkResources false
             minifyEnabled _minify_enabled_debug
+            shrinkResources = _minify_enabled_debug
             //useProguard _use_proguard_debug //默认会使用R8压缩优化代码
             signingConfig signingConfigs.angcyo
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable true
             jniDebuggable = true
             crunchPngs = false
-            shrinkResources = false
         }
         profile {
             //signingConfig = signingConfigs.debug
@@ -132,10 +132,10 @@ android {
             // Signing with the debug keys for now, so `flutter run --profile` works.
             initWith debug
             minifyEnabled _minify_enabled
+            shrinkResources = _minify_enabled
             debuggable true
             jniDebuggable = true
             crunchPngs = true
-            shrinkResources = true
         }
         release {
             //signingConfig = signingConfigs.debug
@@ -144,8 +144,8 @@ android {
             initWith debug
             debuggable false
             jniDebuggable = false
-            minifyEnabled true
-            shrinkResources = true
+            minifyEnabled _minify_enabled
+            shrinkResources = _minify_enabled
             crunchPngs = true
         }
     }
