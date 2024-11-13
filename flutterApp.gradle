@@ -41,6 +41,9 @@ def _T_SDK = project.hasProperty("T_SDK") ? project.ext.T_SDK : '34'
 //def appId = "com.angcyo.flutter3.abc"
 
 android {
+    if (project.android.hasProperty("namespace") && project.hasProperty("appId")) {
+        namespace project.appId
+    }
     //compileSdkVersion _C_SDK.toInteger()
     compileSdk _C_SDK.toInteger() //flutter.compileSdkVersion
     //ndkVersion flutter.ndkVersion
