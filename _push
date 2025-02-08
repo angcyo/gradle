@@ -6,7 +6,8 @@ set +x
 # 将工作目录设置为脚本所在目录
 cd "$(dirname "$0")"
 
-git fetch
-git rebase origin/main
+git add .
+git commit -a -m "fix gradle"
+git push origin master
 
 read -n 1 -s -r -p "!结束! Press any key to continue..."

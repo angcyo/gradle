@@ -2,8 +2,9 @@
 rem 设置当前控制台为UTF-8编码
 chcp 65001 >> nul
 
-git fetch
-git rebase origin/main
+git add .
+git commit -a -m "fix gradle"
+git push origin master
 
 echo "结束"
 pause
