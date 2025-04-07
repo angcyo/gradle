@@ -292,8 +292,13 @@ def readXmlMap(path) {
 }
 
 /**2023-5-29
- * 读取excel文件, 一行一行读取*/
-def readExcelLines(path) {
+ * 读取excel文件, 一行一行读取
+ * @param path excel文件路径
+ * @param skipLine 跳过多少行, 默认0, 从1开始跳过行数
+ * @param maxColumn 最多读几列
+ * @return List<List<String>>
+ * */
+def readExcelLines(path, skipLine = 0, maxColumn = 100) {
     def lines = [] //每一行的数据, N列的数组
     def excelFile = file(path)
     if (excelFile.exists()) {
@@ -302,12 +307,19 @@ def readExcelLines(path) {
         try {
             def sheet = workbook.getSheetAt(0)
             def rowIterator = sheet.iterator()
+
+            def lineIndex = 0
             while (rowIterator.hasNext()) {
                 def row = rowIterator.next()
+                lineIndex++
+                if (lineIndex <= skipLine) {
+                    continue
+                }
                 def cellIterator = row.cellIterator()
                 def line = []
                 def isNullLine = true
-                while (cellIterator.hasNext()) {
+                def columnIndex = 0
+                while (columnIndex < maxColumn && cellIterator.hasNext()) {
                     def cell = cellIterator.next()
                     def value = cell.toString()
                     if (value == null || value.isBlank()) {
@@ -315,6 +327,7 @@ def readExcelLines(path) {
                         isNullLine = false
                     }
                     line.add(value)
+                    columnIndex++
                 }
                 if (!isNullLine) {
                     //如果这一行不是空行, 则添加到lines中
@@ -332,6 +345,47 @@ def readExcelLines(path) {
         }
     }
     return lines
+}
+
+/** 2024-2-23
+ * 读取excel文件中的指定行, 指定列的值
+ * [rowIndex] 行列索引,从1开始
+ * [columnIndex] 列索引,从1开始
+ * */
+def readExcelValue(path, rowIndex, columnIndex) {
+    def excelFile = file(path)
+    if (excelFile.exists()) {
+        def inputStream = new BufferedInputStream(new FileInputStream(excelFile))
+        def workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook(inputStream)
+        try {
+            def sheet = workbook.getSheetAt(0)
+            def rowIterator = sheet.iterator()
+
+            def line = 0
+            while (rowIterator.hasNext()) {
+                def row = rowIterator.next()
+                line++
+                if (line < rowIndex) {
+                    continue
+                }
+                def cellIterator = row.cellIterator()
+                def column = 0
+                while (cellIterator.hasNext()) {
+                    def cell = cellIterator.next()
+                    column++
+                    if (column < columnIndex) {
+                        continue
+                    }
+                    return cell.toString()
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace()
+            System.err.println("读取excel文件失败:${excelFile}")
+            throw e
+        }
+    }
+    return null
 }
 
 /**2023-5-29
@@ -388,6 +442,7 @@ ext {
     //getLanguageResPath = this.&getLanguageResPath
     readXmlMap = this.&readXmlMap
     readExcelLines = this.&readExcelLines
+    readExcelValue = this.&readExcelValue
     readCsvLines = this.&readCsvLines
     convertLinesToMap = this.&convertLinesToMap
 }
