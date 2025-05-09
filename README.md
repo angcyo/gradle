@@ -18,6 +18,7 @@ gradleHost=https://gitcode.net/angcyo/gradle/-/raw
 
 ```
 gradleHost=https://raw.githubusercontent.com/angcyo/gradle
+gradleHost=https://raw.githubusercontent.com/angcyo/gradle/refs/heads #2025-05-09
 ```
 
 # 2020-12-17
