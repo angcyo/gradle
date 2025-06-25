@@ -126,6 +126,8 @@ android {
             jniDebuggable = true
             crunchPngs = false
         }
+        //https://docs.flutter.dev/testing/build-modes#profile
+        //flutter run --profile
         profile {
             //signingConfig = signingConfigs.debug
 
