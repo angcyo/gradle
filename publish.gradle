@@ -91,10 +91,11 @@ afterEvaluate {
 
                     def os = System.getProperty("os.name").toLowerCase()
                     def path = os.contains("window") ? winRepo : macRepo
-                    file(path).mkdirs()
+                    def f = file(path)
+                    f.mkdirs()
                     
                     url = path
-                    System.err.println(project.name + "->本地Maven路径:${path}")
+                    System.err.println(project.name + "->本地Maven路径:${path} -> ${f.absolutePath}")
                 }
             }
         }
