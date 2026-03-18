@@ -31,6 +31,14 @@ def versionName = project.hasProperty('libVersionName') ? project.property('libV
 def winRepo = project.hasProperty('libWinRepo') ? project.property('libWinRepo') : 'E:/maven'
 def macRepo = project.hasProperty('libMacRepo') ? project.property('libMacRepo') : '/Users/angcyo/maven'
 
+def pomName = project.hasProperty('libPomName') ? project.property('libPomName') : project.name
+def pomUrl = project.hasProperty('libPomUrl') ? project.property('libPomUrl') : 'https://github.com/angcyo'
+def pomDes = project.hasProperty('libPomDes') ? project.property('libPomDes') : 'a angcyo library.'
+def pomLicenseName = project.hasProperty('libPomLicenseName') ? project.property('libPomLicenseName') : 'MIT'
+def pomLicenseUrl = project.hasProperty('libPomLicenseUrl') ? project.property('libPomLicenseUrl') : 'https://github.com/angcyo/angcyo/blob/main/LICENSE'
+def pomScmConnection = project.hasProperty('libPomScmConnection') ? project.property('libPomScmConnection') : 'scm:git:github.com/angcyo/angcyo.git'
+def pomScmDeveloperConnection = project.hasProperty('libPomScmDeveloperConnection') ? project.property('libPomScmDeveloperConnection') : 'scm:git:ssh://github.com/angcyo/angcyo.git'
+
 //执行任务↓
 //Executing tasks: [publish] in project E:\AndroidProjects\angcyo\UICoreDemo
 //Executing tasks: [publishAllPublicationsToMavenRepository] in project E:\AndroidProjects\angcyo\UICoreDemo
@@ -55,12 +63,12 @@ afterEvaluate {
             ignore = true
         } else {
             noPublishModule.each {
-                ignore = ignore || project.name == it
+                ignore = ignore || pomName == it
             }
         }
 
         if (ignore) {
-            System.err.println("忽略Maven构建->" + project.name)
+            System.err.println("忽略Maven构建->" + pomName)
         } else {
             //产物收集配置
             publications {
@@ -74,11 +82,35 @@ afterEvaluate {
 
                     // You can then customize attributes of the publication as shown below.
                     groupId = libGroupId
-                    artifactId = project.name
+                    artifactId = pomName
                     version = versionName
 
                     //artifact javadocJar
                     //artifact sourcesJar //2023-8-12 Invalid publication 'release': multiple artifacts with the identical extension and classifier ('jar', 'sources').
+
+                    pom {
+                        name = pomName
+                        description = pomDes
+                        url = pomUrl
+                        licenses {
+                            license {
+                                name = pomLicenseName
+                                url = pomLicenseUrl
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = 'angcyo'
+                                name = 'angcyo'
+                                email = 'angcyo@126.com'
+                            }
+                        }
+                        scm {
+                            connection = pomScmConnection
+                            developerConnection = pomScmDeveloperConnection
+                            url = pomUrl
+                        }
+                    }
                 }
             }
 
@@ -93,9 +125,9 @@ afterEvaluate {
                     def path = os.contains("window") ? winRepo : macRepo
                     def f = file(path)
                     f.mkdirs()
-                    
+
                     url = path
-                    System.err.println(project.name + "->本地Maven路径:${path} -> ${f.absolutePath}")
+                    System.err.println(pomName + "->本地Maven路径:${path} -> ${f.absolutePath}")
                 }
             }
         }
