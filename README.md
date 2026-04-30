@@ -1,3 +1,10 @@
+# 2026-4-30
+
+- [Codeberg](https://codeberg.org/angcyo/gradle) `https://codeberg.org/angcyo/gradle/raw/branch/master`
+- [Github](https://github.com/angcyo/gradle) `https://raw.githubusercontent.com/angcyo/gradle/refs/heads/master`
+- [Gitee](https://gitee.com/angcyo/gradle) `https://gitee.com/angcyo/gradle/raw`
+- [Gitee `new` ](https://gitee.com/angcyo/gradle) `https://raw.giteeusercontent.com/angcyo/gradle/raw/master`
+
 # 2022-10-22
 
 请在`gradle.properties`文件中配置脚本服务器(请不要以`/`结尾):
