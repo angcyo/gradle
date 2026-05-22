@@ -6,5 +6,4 @@ git push origin master
 git push code master
 git push gitee master
 
-echo "结束"
-pause
+echo "结束!"
