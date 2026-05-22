@@ -105,7 +105,8 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
-    if (com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.substringBefore('.').toInt() < 9) {
+    if (Integer.parseInt(com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.split("\\.")[0]) < 9) {
+        //com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.substringBefore('.').toInt()
         kotlinOptions {
             if (project.hasProperty("kotlinJvmTarget")) {
                 jvmTarget = project.kotlinJvmTarget
