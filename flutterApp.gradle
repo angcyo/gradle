@@ -46,6 +46,8 @@ def _T_SDK = project.hasProperty("T_SDK") ? project.ext.T_SDK : flutter.targetSd
 def _NDK_SDK = project.hasProperty("NDK_SDK") ? project.ext.NDK_SDK : flutter.ndkVersion
 
 println "\n........flutterApp.gradle........${_appId}"
+println("gradleVersion: ${gradle.gradleVersion}")
+println("AGPVersion: ${com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION}")
 println "flutter.targetSdkVersion=${flutter.targetSdkVersion} -> ${_T_SDK}"
 println "flutter.compileSdkVersion=${flutter.compileSdkVersion} -> ${_C_SDK}"
 println "flutter.minSdkVersion=${flutter.minSdkVersion} -> ${_M_SDK}"
@@ -103,13 +105,15 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
-    kotlinOptions {
-        if (project.hasProperty("kotlinJvmTarget")) {
-            jvmTarget = project.kotlinJvmTarget
-        } else if (project.hasProperty("useJava17") && Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
-            jvmTarget = JavaVersion.VERSION_17
-        } else {
-            jvmTarget = JavaVersion.VERSION_1_8
+    if (com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.substringBefore('.').toInt() < 9) {
+        kotlinOptions {
+            if (project.hasProperty("kotlinJvmTarget")) {
+                jvmTarget = project.kotlinJvmTarget
+            } else if (project.hasProperty("useJava17") && Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
+                jvmTarget = JavaVersion.VERSION_17
+            } else {
+                jvmTarget = JavaVersion.VERSION_1_8
+            }
         }
     }
 
@@ -203,6 +207,19 @@ android {
             // Set your custom filters.
             ndk.abiFilters = ["arm64-v8a", "armeabi-v7a"]
             // ndk.abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
+        }
+    }
+}
+
+project.extensions.configure(org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension::class.java) {
+    compilerOptions {
+        //jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        if (project.hasProperty("kotlinJvmTarget")) {
+            jvmTarget = project.kotlinJvmTarget
+        } else if (project.hasProperty("useJava17") && Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
+            jvmTarget = JavaVersion.VERSION_17
+        } else {
+            jvmTarget = JavaVersion.VERSION_1_8
         }
     }
 }
