@@ -2,9 +2,14 @@
 
 android {
     defaultConfig {
-        ndk {
-            // 设置支持的SO库架构
-            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        // 设置支持的SO库架构
+        if (Integer.parseInt(com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.split("\\.")[0]) >= 8) {
+            ndk.abiFilters.clear()
+            ndk.abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
+        } else {
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
         }
     }
 }
