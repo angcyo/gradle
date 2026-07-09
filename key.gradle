@@ -271,14 +271,14 @@ println(
         "\nkey.alias:" + signConfig.key_alias +
                 "\nkey.password:" + signConfig.key_password +
                 "\nkey.file:" + signConfig.key_file +
-                "\npassword:" + signConfig.password + "\n"
+                "\npassword:" + signConfig.password
 )
 
 println(
         "\n[Bundle]key.alias:" + signConfigBundle.key_alias +
                 "\n[Bundle]key.password:" + signConfigBundle.key_password +
                 "\n[Bundle]key.file:" + signConfigBundle.key_file +
-                "\n[Bundle]password:" + signConfigBundle.password + "\n"
+                "\n[Bundle]password:" + signConfigBundle.password
 )
 
 println("...end...↑\n")
