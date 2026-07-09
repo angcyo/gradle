@@ -72,8 +72,7 @@ println "........flutterApp.gradle........end"
 // 是否是打包 aab
 // - assembleRelease
 // - bundleRelease
-def isBundleTask =
-        gradle.startParameter.taskNames.any { it.contains("bundleRelease", ignoreCase = true) }
+def isBundleTask = gradle.startParameter.taskNames.any { it.contains("bundleRelease") }
 
 android {
     if (project.android.hasProperty("namespace") && project.hasProperty("appId")) {
