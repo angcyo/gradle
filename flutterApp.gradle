@@ -214,15 +214,18 @@ android {
 }
 
 if (Integer.parseInt(com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.split("\\.")[0]) >= 9) {
-    project.extensions.configure(org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension::class.java) {
-        compilerOptions {
-            //jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-            if (project.hasProperty("kotlinJvmTarget")) {
-                jvmTarget = project.kotlinJvmTarget
-            } else if (project.hasProperty("useJava17") && Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
-                jvmTarget = JavaVersion.VERSION_17
-            } else {
-                jvmTarget = JavaVersion.VERSION_1_8
+    project.plugins.withId("org.jetbrains.kotlin.android") {
+        project.extensions.configure(org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension::class.java) {
+            compilerOptions {
+                //jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17 "1.8" "17"
+                //jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(targetStr))
+                if (project.hasProperty("kotlinJvmTarget")) {
+                    jvmTarget = project.kotlinJvmTarget
+                } else if (project.hasProperty("useJava17") && Integer.parseInt(gradle.gradleVersion.split("\\.")[0]) >= 8) {
+                    jvmTarget = JavaVersion.VERSION_17
+                } else {
+                    jvmTarget = JavaVersion.VERSION_1_8
+                }
             }
         }
     }
