@@ -12,6 +12,7 @@ println("脚本的路径:" + file(".").absolutePath)
 ext.maxDepth = 2
 //查找默认的jks文件路径
 ext.angcyoJksFile = "未找到默认的angcyo.jks文件"
+ext.angcyoJksFileBundle = "未找到默认的angcyo.jks文件[Bundle]"
 
 /**枚举文件夹, 拿到`angcyo.jks`的路径*/
 listPath(rootDir)
@@ -44,11 +45,18 @@ def includePath(File filePath, String parent) {
         if (targetFile.exists()) {
             angcyoJksFile = targetFile.getAbsolutePath()
         }
+        def targetFileBundle = new File(filePath, "angcyo_bundle.jks")
+        if (targetFileBundle.exists()) {
+            angcyoJksFileBundle = targetFileBundle.getAbsolutePath()
+        }
     }
 }
 
 ext.keyFileName = "key_file.properties"
 ext.keyFilePropertiesPath = rootDir.absolutePath + "/" + keyFileName
+
+ext.keyFileNameBundle = "key_file_bundle.properties"
+ext.keyFilePropertiesPathBundle = rootDir.absolutePath + "/" + keyFileNameBundle
 
 findKeyFileProperties(rootDir)
 
@@ -64,9 +72,13 @@ def findKeyFileProperties(File filePath, depth = 0 /*当前枚举的路径深度
             if (it.isDirectory()) {
 
                 def targetFile = new File(it, keyFileName)
-
                 if (targetFile.exists()) {
                     keyFilePropertiesPath = targetFile.getAbsolutePath()
+                }
+
+                def targetFileBundle = new File(it, keyFileNameBundle)
+                if (targetFileBundle.exists()) {
+                    keyFilePropertiesPathBundle = targetFileBundle.getAbsolutePath()
                 }
 
                 findKeyFileProperties(it, depth + 1)
@@ -83,12 +95,18 @@ String key_password = 'angcyo'
 String key_file = angcyoJksFile
 String password = 'angcyo'
 
+String key_alias_bundle = 'app'
+String key_password_bundle = 'angcyo'
+String key_file_bundle = angcyoJksFile
+String password_bundle = 'angcyo'
+
 //读取key文件
 Properties props = new Properties()
 
 //判断是否是非windows系统
 def isLinux = !System.getProperty("os.name").toLowerCase().contains("windows")
 
+// key_file
 if (rootProject.hasProperty("key_file")) {
 
     String keyFileConfigString = rootProject.property("key_file")
@@ -159,6 +177,81 @@ if (jksFile.exists()) {
     }
 }
 
+// key_file_bundle
+if (rootProject.hasProperty("key_file_bundle")) {
+
+    String keyFileConfigString = rootProject.property("key_file_bundle")
+    File keyConfigFile = new File(rootDir, keyFileConfigString)
+    //println("->" + keyConfigFile.exists() + "->" + keyFile2.exists())
+
+    if (!keyConfigFile.exists()) {
+        println("[Bundle]根目录未找到配置文件:" + keyConfigFile.getAbsolutePath())
+
+        keyConfigFile = file(keyFileConfigString)
+
+        println("[Bundle]切换到至:" + keyConfigFile.getAbsolutePath())
+    }
+
+    if (keyConfigFile.exists()) {
+        println("[Bundle]读取的配置文件:" + keyConfigFile.getAbsolutePath())
+
+        props.load(new FileInputStream(keyConfigFile))
+        key_alias_bundle = props['key.alias']
+        key_password_bundle = props['key.password']
+        key_file_bundle = isLinux ? props['key.fileMac'] ?: props['key.file'] : props['key.file']
+        password_bundle = props['password']
+
+        //println("key_file:" + key_file)
+        //key_file = keyConfigFile.getParent() + "/" + key_file
+        //println("key_file2:" + key_file)
+    } else {
+        println("[Bundle]指定的配置文件:" + keyConfigFile.getAbsolutePath() + "不存在, 将采用默认签名进行.")
+    }
+} else {
+    File keyFilePropertiesFile = new File(keyFilePropertiesPathBundle)
+    if (keyFilePropertiesFile.exists()) {
+        println("[Bundle]读取的配置文件:" + keyFilePropertiesFile.getAbsolutePath())
+
+        props.load(new FileInputStream(keyFilePropertiesFile))
+        key_alias_bundle = props['key.alias']
+        key_password_bundle = props['key.password']
+        key_file_bundle = isLinux ? props['key.fileMac'] ?: props['key.file'] : props['key.file']
+        password_bundle = props['password']
+
+        if (key_file_bundle != null) {
+            def absolute_path = props['absolute_path']
+            if (absolute_path == null || absolute_path == true) {
+                //使用绝对路径
+                key_file_bundle = file(key_file_bundle).absolutePath
+            }
+        }
+
+        //println("key_file:" + key_file)
+        //key_file = keyConfigFile.getParent() + "/" + key_file
+        //println("key_file2:" + key_file)
+        println("[Bundle]签名配置:${props} -> ${key_file_bundle}")
+    } else {
+        key_alias_bundle = key_alias
+        key_password_bundle = key_password
+        key_file_bundle = key_file
+        password_bundle = password
+
+        println("[Bundle]未声明key_file_bundle属性, 将采用默认签名进行.")
+    }
+}
+
+File jksFileBundle = new File(key_file_bundle)
+if (jksFileBundle.exists()) {
+    key_file_bundle = jksFileBundle.getAbsolutePath()
+} else {
+    jksFileBundle = new File(rootDir, key_file_bundle)
+
+    if (jksFileBundle.exists()) {
+        key_file_bundle = jksFileBundle.getAbsolutePath()
+    } else {
+        println("[Bundle]jks文件不存在, 签名将无法进行->${jksFileBundle.path}")
+    }
+}
 
 rootProject.ext.signConfig = [
         "key_alias"   : key_alias,
@@ -167,11 +260,25 @@ rootProject.ext.signConfig = [
         "password"    : password
 ]
 
+rootProject.ext.signConfigBundle = [
+        "key_alias"   : key_alias_bundle,
+        "key_password": key_password_bundle,
+        "key_file"    : key_file_bundle,
+        "password"    : password_bundle
+]
+
 println(
         "\nkey.alias:" + signConfig.key_alias +
                 "\nkey.password:" + signConfig.key_password +
                 "\nkey.file:" + signConfig.key_file +
                 "\npassword:" + signConfig.password + "\n"
+)
+
+println(
+        "\n[Bundle]key.alias:" + signConfigBundle.key_alias +
+                "\n[Bundle]key.password:" + signConfigBundle.key_password +
+                "\n[Bundle]key.file:" + signConfigBundle.key_file +
+                "\n[Bundle]password:" + signConfigBundle.password + "\n"
 )
 
 println("...end...↑\n")
@@ -187,6 +294,15 @@ android {
             v2SigningEnabled true
         }
 
+        angcyo_bundle {
+            keyAlias key_alias_bundle
+            keyPassword key_password_bundle
+            storeFile file(key_file_bundle)
+            storePassword password_bundle
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+
         //2024-9-23 动态创建签名配置
         if (key_alias != null && key_alias != "") {
             create(key_alias) {
@@ -194,6 +310,17 @@ android {
                 keyPassword key_password
                 storeFile file(key_file)
                 storePassword password
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
+        }
+
+        if (key_alias_bundle != null && key_alias_bundle != "") {
+            create(key_alias_bundle) {
+                keyAlias key_alias_bundle
+                keyPassword key_password_bundle
+                storeFile file(key_file_bundle)
+                storePassword password_bundle
                 v1SigningEnabled true
                 v2SigningEnabled true
             }

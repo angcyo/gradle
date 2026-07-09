@@ -69,6 +69,12 @@ println "........flutterApp.gradle........end"
 //keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 //val isLinux = !System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")
 
+// 是否是打包 aab
+// - assembleRelease
+// - bundleRelease
+def isBundleTask =
+        gradle.startParameter.taskNames.any { it.contains("bundleRelease", ignoreCase = true) }
+
 android {
     if (project.android.hasProperty("namespace") && project.hasProperty("appId")) {
         namespace project.appId
@@ -173,7 +179,7 @@ android {
             minifyEnabled _minify_enabled_debug
             shrinkResources = _minify_enabled_debug
             //useProguard _use_proguard_debug //默认会使用R8压缩优化代码
-            signingConfig signingConfigs.angcyo
+            signingConfig isBundleTask ? signingConfigs.angcyo_bundle : signingConfigs.angcyo
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable true
             jniDebuggable = true
