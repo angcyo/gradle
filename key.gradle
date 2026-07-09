@@ -315,7 +315,7 @@ android {
             }
         }
 
-        if (key_alias_bundle != null && key_alias_bundle != "") {
+        if (key_alias_bundle != null && key_alias_bundle != key_alias) {
             create(key_alias_bundle) {
                 keyAlias key_alias_bundle
                 keyPassword key_password_bundle
