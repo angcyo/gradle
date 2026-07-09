@@ -6,7 +6,7 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-println("key.gradle↓\n项目根路径:" + rootDir.absolutePath)
+println("---[key.gradle]---↓\n项目根路径:" + rootDir.absolutePath)
 println("脚本的路径:" + file(".").absolutePath)
 
 ext.maxDepth = 2
@@ -115,9 +115,7 @@ if (rootProject.hasProperty("key_file")) {
 
     if (!keyConfigFile.exists()) {
         println("根目录未找到配置文件:" + keyConfigFile.getAbsolutePath())
-
         keyConfigFile = file(keyFileConfigString)
-
         println("切换到至:" + keyConfigFile.getAbsolutePath())
     }
 
@@ -186,9 +184,7 @@ if (rootProject.hasProperty("key_file_bundle")) {
 
     if (!keyConfigFile.exists()) {
         println("[Bundle]根目录未找到配置文件:" + keyConfigFile.getAbsolutePath())
-
         keyConfigFile = file(keyFileConfigString)
-
         println("[Bundle]切换到至:" + keyConfigFile.getAbsolutePath())
     }
 
@@ -268,20 +264,20 @@ rootProject.ext.signConfigBundle = [
 ]
 
 println(
-        "\nkey.alias:" + signConfig.key_alias +
-                "\nkey.password:" + signConfig.key_password +
-                "\nkey.file:" + signConfig.key_file +
-                "\npassword:" + signConfig.password
+        "\nkey.alias: " + signConfig.key_alias +
+                "\nkey.password: " + signConfig.key_password +
+                "\nkey.file: " + signConfig.key_file +
+                "\npassword: " + signConfig.password
 )
 
 println(
-        "\n[Bundle]key.alias:" + signConfigBundle.key_alias +
-                "\n[Bundle]key.password:" + signConfigBundle.key_password +
-                "\n[Bundle]key.file:" + signConfigBundle.key_file +
-                "\n[Bundle]password:" + signConfigBundle.password
+        "\n[Bundle]key.alias: " + signConfigBundle.key_alias +
+                "\n[Bundle]key.password: " + signConfigBundle.key_password +
+                "\n[Bundle]key.file: " + signConfigBundle.key_file +
+                "\n[Bundle]password: " + signConfigBundle.password
 )
 
-println("...end...↑\n")
+println("[key.gradle]...end...↑\n")
 
 android {
     signingConfigs {
